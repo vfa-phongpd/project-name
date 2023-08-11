@@ -39,6 +39,20 @@ export class CreateTableRolePermissions1691674449929 implements MigrationInterfa
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.dropTable("roles_permissions")
+
+
+        const table = await queryRunner.getTable("roles_permissions")
+        const foreignKey = table.foreignKeys.find(
+            (fk) => fk.columnNames.indexOf("role_id") !== -1,
+        )
+        await queryRunner.dropForeignKey("roles_permissions", foreignKey)
+
+
+        const foreignKey2 = table.foreignKeys.find(
+            (fk) => fk.columnNames.indexOf("permission_id") !== -1,
+        )
+        await queryRunner.dropForeignKey("roles_permissions", foreignKey2)
     }
 
 }

@@ -37,7 +37,7 @@ export class CreateTableRoles1691672076834 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        // const table = await queryRunner.getTable("roles")
+        await queryRunner.dropTable("roles")
     }
 
 }

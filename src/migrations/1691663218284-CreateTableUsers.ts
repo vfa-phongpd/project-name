@@ -45,7 +45,7 @@ export class CreateTableUsers1691663218284 implements MigrationInterface {
                     },
                     {
                         name: "gender",
-                        type: "tinyint",
+                        type: "tinyint(1)",
                         isNullable: false,
                     },
                     {
@@ -116,7 +116,10 @@ export class CreateTableUsers1691663218284 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("users")
+
+        await queryRunner.dropColumn("user", "group_id")
+        await queryRunner.dropColumn("users", "role_id")
+        await queryRunner.dropTable("user")
     }
 
 }
