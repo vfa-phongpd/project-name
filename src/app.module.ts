@@ -21,7 +21,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { RolePermissionsModule } from './role_permissions/role_permissions.module';
 import { AuthModule } from './auth/auth.module';
-import { AccessTokenStategy } from './stategy/accesstoken.stategy';
+import { AccessTokenStategy } from './vendors/stategy/accesstoken.stategy';
 
 @Module({
   imports: [

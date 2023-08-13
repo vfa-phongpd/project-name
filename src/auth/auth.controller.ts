@@ -7,14 +7,17 @@ import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import * as bcrypt from 'bcrypt';
 import { JwtAuthGuard } from 'src/vendors/guard/jwt-auth.guard';
 import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from 'src/vendors/guard/role.guard';
+import { Roles } from 'src/vendors/decorators/role.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('admin/login')
+  @Roles('admin group', "admin")
   @ApiOperation({ summary: 'Login user' })
   @ApiResponse({
     status: 200,
@@ -77,6 +80,18 @@ export class AuthController {
     }
   })
   async login(@Body() LoginUserDto: LoginUserAuthDto, @Req() request) {
+    // const user = request.user
+
+    // const roleUser = await this.authService.CheckRolesUser(user.email)
+    // console.log(roleUser);
+
+    // if (roleUser === "admin") {
+    //   return {
+    //     message: "Forbidden resource",
+    //     error: "Forbidden",
+    //     statusCode: 403
+    //   }
+    // }
     const dataUser = await this.authService.findOne(LoginUserDto.email)
     if (!dataUser) {
       return {
@@ -94,12 +109,9 @@ export class AuthController {
         message: "Invalid Password user"
       };
     }
-    const accessToken = await this.authService.generateAccessToken(LoginUserDto.email, dataUser.id, dataUser.role_id.role_id);
-    const refreshToken = await this.authService.generateRefreshToken(LoginUserDto.email, dataUser.id, dataUser.role_id.role_id);
-    const user = request.user; // Authenticated user
-
-    console.log(user);
-
+    const accessToken = await this.authService.generateAccessToken(LoginUserDto.email, dataUser.id, dataUser.role_id.role_name);
+    const refreshToken = await this.authService.generateRefreshToken(LoginUserDto.email, dataUser.id, dataUser.role_id.role_name);
+    ; // Authenticated user
 
 
     return {
@@ -113,8 +125,5 @@ export class AuthController {
       }
     }
   }
-
-
-
 
 }

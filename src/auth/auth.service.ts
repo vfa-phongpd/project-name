@@ -25,7 +25,7 @@ export class AuthService {
 
   async findOne(email: string) {
     try {
-      const infoUser = this.userRepository.findOne({ relations: { role_id: true }, where: { email } })
+      const infoUser = await this.userRepository.findOne({ relations: { role_id: true }, where: { email } })
       //const infoUser = await this.userRepository.findOne({ where: { email } })
       return infoUser
     } catch (error) {
@@ -78,6 +78,16 @@ export class AuthService {
       return decoded;
     } catch (error) {
       return null; // Handle token validation error appropriately
+    }
+  }
+
+
+  async CheckRolesUser(email: string) {
+    try {
+      const infoUser = await this.userRepository.findOne({ relations: { role_id: true }, where: { email } })
+      return infoUser.role_id.role_name
+    } catch (error) {
+      throw new Error(error)
     }
   }
 }

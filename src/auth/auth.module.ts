@@ -5,7 +5,7 @@ import { User } from 'src/users/entities/user.entity';
 import { UsersModule } from 'src/users/users.module';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { AccessTokenStategy } from 'src/stategy/accesstoken.stategy';
+import { AccessTokenStategy } from 'src/vendors/stategy/accesstoken.stategy';
 
 @Module({
   imports: [UsersModule],
