@@ -8,7 +8,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 
 
 
-@Entity()
+@Entity('users')
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
@@ -34,19 +34,20 @@ export class User {
     @Column({ name: 'gender', nullable: false, default: 0 })
     gender: Boolean;
 
-    @Column({ type: 'datetime', name: 'rent_date', nullable: false })
+    @Column({ type: 'datetime', nullable: false })
     birthday: Date;
 
-    @Column({ type: 'timestamp', name: 'rent_date', nullable: true })
+    @Column({ type: 'timestamp', nullable: true })
     last_login: Date;
 
 
-    @ManyToOne(() => Role, (Role) => Role.users)
-    role: Role
+    @ManyToOne(() => Role, (role) => role.users)
+    @JoinColumn({ name: 'role_id' }) // Đảm bảo tên cột tham chiếu chính xác
+    role_id: Role;
 
     @OneToOne(() => Group)
-    @JoinColumn()
-    group: Group;
+    @JoinColumn({ name: 'group_id' })
+    group_id: Group;
 
     @CreateDateColumn({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
     created_at: Date;

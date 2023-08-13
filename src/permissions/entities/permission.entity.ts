@@ -3,7 +3,7 @@ import { IsNotEmpty } from 'class-validator';
 import { Role } from 'src/roles/entities/role.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne, OneToMany, ManyToMany } from 'typeorm';
 
-@Entity()
+@Entity('permissions')
 export class Permission {
     @PrimaryGeneratedColumn()
     id: number;

@@ -30,6 +30,12 @@ export class CreateTableGroups1691672058353 implements MigrationInterface {
 
                     },
                     {
+                        name: "group_admin_id",
+                        type: "int",
+                        isUnique: true,
+                        isNullable: true,
+                    },
+                    {
                         name: "created_at",
                         type: "DATETIME(6)",
                         isNullable: false,

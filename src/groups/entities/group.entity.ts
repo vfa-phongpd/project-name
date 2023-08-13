@@ -3,7 +3,7 @@ import { User } from 'src/users/entities/user.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne } from 'typeorm';
 
 
-@Entity()
+@Entity('groups')
 export class Group {
 
     @PrimaryGeneratedColumn()
