@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 // import { User } from 'src/users/entities/user.entity';
 import { User } from '.././users/entities/user.entity'
 import { JwtService } from '@nestjs/jwt';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
 
@@ -20,8 +20,36 @@ export class AuthService {
     return 'This action adds a new auth';
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async login(email: string, password: string) {
+    const dataUser = await this.findOne(email)
+    if (!dataUser) {
+      return {
+        code: "B0002",
+        status: 400,
+        message: "Invalid Email user"
+      };
+    }
+    const isPasswordValid = await bcrypt.compare(password, (await dataUser).password);
+
+    if (!isPasswordValid) {
+      return {
+        code: "B0002",
+        status: 400,
+        message: "Invalid Password user"
+      };
+    }
+    const accessToken = await this.generateAccessToken(email, dataUser.id, dataUser.role_id.role_name);
+    const refreshToken = await this.generateRefreshToken(email, dataUser.id, dataUser.role_id.role_name);
+    return {
+      statusCode: 200,
+      data: {
+        name: dataUser.name,
+        user_id: dataUser.id,
+        user_role: dataUser.role_id.role_name,
+        access_token: accessToken,
+        refresh_token: refreshToken
+      }
+    }
   }
 
   async findOne(email: string) {

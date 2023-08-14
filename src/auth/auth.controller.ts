@@ -80,38 +80,10 @@ export class AuthController {
     }
   })
   async login(@Body() LoginUserDto: LoginUserAuthDto) {
-
-    const dataUser = await this.authService.findOne(LoginUserDto.email)
-    if (!dataUser) {
-      return {
-        code: "B0002",
-        status: 400,
-        message: "Invalid Email user"
-      };
-    }
-    const isPasswordValid = await bcrypt.compare(LoginUserDto.password, (await dataUser).password);
-
-    if (!isPasswordValid) {
-      return {
-        code: "B0002",
-        status: 400,
-        message: "Invalid Password user"
-      };
-    }
-    const accessToken = await this.authService.generateAccessToken(LoginUserDto.email, dataUser.id, dataUser.role_id.role_name);
-    const refreshToken = await this.authService.generateRefreshToken(LoginUserDto.email, dataUser.id, dataUser.role_id.role_name);
-    ; // Authenticated user
-
-
+    const dataLogin = await this.authService.login(LoginUserDto.email, LoginUserDto.password)
     return {
-      statusCode: 200,
-      data: {
-        name: dataUser.name,
-        user_id: dataUser.id,
-        user_role: dataUser.role_id.role_name,
-        access_token: accessToken,
-        refresh_token: refreshToken
-      }
+      message: "success",
+      dataLogin
     }
   }
 
