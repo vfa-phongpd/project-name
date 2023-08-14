@@ -15,9 +15,9 @@ import { Roles } from 'src/vendors/decorators/role.decorator';
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  // @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('admin/login')
-  @Roles('admin group', "admin")
+  // @Roles('admin group', "admin")
   @ApiOperation({ summary: 'Login user' })
   @ApiResponse({
     status: 200,
@@ -80,18 +80,7 @@ export class AuthController {
     }
   })
   async login(@Body() LoginUserDto: LoginUserAuthDto, @Req() request) {
-    // const user = request.user
 
-    // const roleUser = await this.authService.CheckRolesUser(user.email)
-    // console.log(roleUser);
-
-    // if (roleUser === "admin") {
-    //   return {
-    //     message: "Forbidden resource",
-    //     error: "Forbidden",
-    //     statusCode: 403
-    //   }
-    // }
     const dataUser = await this.authService.findOne(LoginUserDto.email)
     if (!dataUser) {
       return {
