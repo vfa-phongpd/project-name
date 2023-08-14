@@ -15,8 +15,15 @@ export class UsersService {
 
   ) { }
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto) {
+    try {
+      const createData = await this.userRepository.create({
+
+
+      })
+    } catch (error) {
+
+    }
   }
 
   findAll() {
