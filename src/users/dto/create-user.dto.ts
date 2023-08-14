@@ -1,8 +1,9 @@
 import { IsString, IsEmail, IsNumber, IsDate, IsOptional, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
+import { Group } from 'src/groups/entities/group.entity';
+import { Role } from 'src/roles/entities/role.entity';
 
 export class CreateUserDto {
-    @IsNumber()
-    id: number;
+
 
     @IsString()
     @IsNotEmpty()
@@ -12,10 +13,7 @@ export class CreateUserDto {
     @IsNotEmpty()
     email: string;
 
-    @IsNotEmpty()
-    @IsString()
-    @MinLength(6)
-    @MaxLength(20)
+
     password: string;
 
     @IsNotEmpty()
@@ -23,34 +21,25 @@ export class CreateUserDto {
     gender: number;
 
     @IsNotEmpty()
-    @IsDate()
     birthday: Date;
 
-    @IsDate()
+
     last_login: Date | null;
 
-    @IsNotEmpty()
-    @IsDate()
     created_at: Date;
 
-    @IsNotEmpty()
-    @IsNumber()
     created_by: number;
 
-
-    @IsNumber()
     updated_by: number | null;
-
 
     deleted_at: Date | null;
 
-
     updated_at: Date | null;
 
-    @IsNumber()
-    group_id: number | null;
+    group_id: Group
 
     @IsNotEmpty()
-    @IsNumber()
-    role_id: number;
+    role_id: Role
 }
+
+

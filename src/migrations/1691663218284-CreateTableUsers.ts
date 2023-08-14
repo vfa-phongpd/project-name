@@ -40,7 +40,7 @@ export class CreateTableUsers1691663218284 implements MigrationInterface {
                         name: "password",
                         type: "varchar",
                         length: "255",
-                        isNullable: false,
+                        isNullable: true,
 
                     },
                     {
