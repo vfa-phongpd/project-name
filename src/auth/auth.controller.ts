@@ -89,9 +89,6 @@ export class AuthController {
         message: "Invalid Email user"
       };
     }
-
-    console.log(dataUser);
-
     const isPasswordValid = await bcrypt.compare(LoginUserDto.password, (await dataUser).password);
 
     if (!isPasswordValid) {

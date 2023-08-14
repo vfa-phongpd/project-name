@@ -2,8 +2,8 @@
 // import { Role } from 'src/roles/entities/role.entity';
 import { Exclude } from 'class-transformer';
 import { IsEmail, IsNotEmpty, MaxLength } from 'class-validator';
-import { Group } from 'src/groups/entities/group.entity';
-import { Role } from 'src/roles/entities/role.entity';
+import { Group } from '../../groups/entities/group.entity';
+import { Role } from '../../roles/entities/role.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne, Unique, OneToMany, ManyToOne } from 'typeorm';
 
 
@@ -27,12 +27,12 @@ export class User {
     @Exclude()
     @IsNotEmpty({ message: 'Password can not be null or empty' })
     @MaxLength(255, { message: 'The length must be less than 255 characters' })
-    @Column({ type: 'varchar', nullable: false })
+    @Column({ type: 'varchar', nullable: false },)
     password: string;
 
     @IsNotEmpty({ message: 'gender can not be null or empty' })
     @Column({ name: 'gender', nullable: false, default: 0 })
-    gender: Boolean;
+    gender: number;
 
     @Column({ type: 'datetime', nullable: false })
     birthday: Date;

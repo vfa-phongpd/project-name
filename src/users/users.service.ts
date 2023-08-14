@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AppService } from 'src/app.service';
@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
 
@@ -15,9 +15,33 @@ export class UsersService {
 
   ) { }
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async createUser(createUserDto: CreateUserDto, emailToken: string) {
+    try {
+
+      const infoUser = await this.userRepository.findOne({ where: { email: emailToken } })
+
+      if (!infoUser) {
+        throw new BadRequestException('User Invalid');
+      }
+
+
+      const data = this.userRepository.create({
+        name: createUserDto.name,
+        email: createUserDto.email,
+        password: createUserDto.password ? await bcrypt.hash(createUserDto.password, 10) : await bcrypt.hash('member@123', 10),
+        gender: createUserDto.gender,
+        birthday: createUserDto.birthday,
+        created_at: new Date(),
+        created_by: infoUser.id,
+        role_id: createUserDto.role_id
+      })
+
+      return this.userRepository.save(data)
+    } catch (error) {
+      throw new Error(error)
+    }
   }
+
 
   findAll() {
     return `This action returns all users`;
