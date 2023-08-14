@@ -49,6 +49,20 @@ export class InsertData1691982691847 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        // Delete user
+        await queryRunner.query(`DELETE FROM users WHERE id = '1'`);
+
+        // Delete role_permission pairs
+        await queryRunner.query(`DELETE FROM roles_permissions WHERE role_id IN (1, 2)`);
+
+        // Delete permissions
+        await queryRunner.query(`DELETE FROM permissions WHERE permission_name IN (
+        'create_member', 'update_member', 'delete_member', 'view_member', 'assign_member_to_group',
+        'create_group', 'update_group', 'delete_group', 'view_group'
+        )`);
+
+        // Delete roles
+        await queryRunner.query(`DELETE FROM roles WHERE role_name IN ('admin', 'group admin', 'member')`);
     }
 
 }
