@@ -11,12 +11,18 @@ async function bootstrap() {
     .setDescription('The  API description')
     .setVersion('1.0')
     .addTag('Auth')
-    .build();
+    .addBearerAuth()
+    .build()
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
 
 
+
   await app.listen(3000);
 }
 bootstrap();
+function addBearerAuth() {
+  throw new Error('Function not implemented.');
+}
+
