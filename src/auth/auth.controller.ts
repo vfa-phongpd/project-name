@@ -79,7 +79,7 @@ export class AuthController {
       }
     }
   })
-  async login(@Body() LoginUserDto: LoginUserAuthDto, @Req() request) {
+  async login(@Body() LoginUserDto: LoginUserAuthDto) {
 
     const dataUser = await this.authService.findOne(LoginUserDto.email)
     if (!dataUser) {
@@ -89,6 +89,9 @@ export class AuthController {
         message: "Invalid Email user"
       };
     }
+
+    console.log(dataUser);
+
     const isPasswordValid = await bcrypt.compare(LoginUserDto.password, (await dataUser).password);
 
     if (!isPasswordValid) {

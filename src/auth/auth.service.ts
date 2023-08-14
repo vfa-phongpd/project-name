@@ -26,7 +26,6 @@ export class AuthService {
   async findOne(email: string) {
     try {
       const infoUser = await this.userRepository.findOne({ relations: { role_id: true }, where: { email } })
-      //const infoUser = await this.userRepository.findOne({ where: { email } })
       return infoUser
     } catch (error) {
       throw new Error(error)
