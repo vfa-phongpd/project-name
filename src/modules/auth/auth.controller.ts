@@ -1,12 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 import { LoginUserAuthDto } from './dto/login-auth.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import * as bcrypt from 'bcrypt';
+import { CustomResponse } from 'src/common/response_success';
+import { SUCCESS_RESPONSE } from 'src/common/custom-exceptions';
 
-import { AuthGuard } from '@nestjs/passport';
 
 
 
@@ -15,9 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
-  // @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('admin/login')
-  // @Roles('admin group', "admin")
   @ApiOperation({ summary: 'Login user' })
   @ApiResponse({
     status: 200,
@@ -81,12 +77,13 @@ export class AuthController {
   })
   async login(@Body() LoginUserDto: LoginUserAuthDto) {
     const dataLogin = await this.authService.login(LoginUserDto.email, LoginUserDto.password)
-    return {
-      message: "success",
+    return new CustomResponse(SUCCESS_RESPONSE.AdminLoginSuccess, {
+      name: dataLogin.data.name,
+      user_id: dataLogin.data.user_id,
+      user_role: dataLogin.data.user_role,
       accesss_token: dataLogin.data.access_token,
       refresh_token: dataLogin.data.refresh_token,
-
-    }
+    })
   }
 
 }

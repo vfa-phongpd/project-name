@@ -8,6 +8,8 @@ import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/entities/user.entity';
+import { ERROR_RESPONSE } from 'src/common/custom-exceptions';
+import { ErrorCustom } from 'src/common/error-custom';
 
 @Injectable()
 export class AuthService {
@@ -25,20 +27,12 @@ export class AuthService {
   async login(email: string, password: string) {
     const dataUser = await this.findOne(email)
     if (!dataUser) {
-      return {
-        code: "B0002",
-        status: 400,
-        message: "Invalid Email user"
-      };
+      throw new ErrorCustom(ERROR_RESPONSE.InvalidEmail)
     }
     const isPasswordValid = await bcrypt.compare(password, (await dataUser).password);
 
     if (!isPasswordValid) {
-      return {
-        code: "B0002",
-        status: 400,
-        message: "Invalid Password user"
-      };
+      throw new ErrorCustom(ERROR_RESPONSE.InvalidPassword)
     }
     const accessToken = await this.generateAccessToken(email, dataUser.id, dataUser.role_id.role_name);
     const refreshToken = await this.generateRefreshToken(email, dataUser.id, dataUser.role_id.role_name);

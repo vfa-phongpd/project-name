@@ -4,8 +4,9 @@ import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from '../../src/users/entities/user.entity';
+
 import { LoginUserAuthDto } from './dto/login-auth.dto';
+import { User } from 'src/entities/user.entity';
 
 
 
