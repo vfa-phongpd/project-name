@@ -7,7 +7,6 @@ import { ConfigModule } from '@nestjs/config';
 import { dataSourceOptions } from './db/mysql';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { AccessTokenStategy } from './vendors/stategy/accesstoken.stategy';
 import { UsersModule } from './modules/users/users.module';
 import { UsersService } from './modules/users/users.service';
 import { RolesModule } from './modules/roles/roles.module';

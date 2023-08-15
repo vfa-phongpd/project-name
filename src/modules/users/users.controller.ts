@@ -2,10 +2,12 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpS
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { JwtAuthGuard } from 'src/vendors/guard/jwt-auth.guard';
+
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RolesGuard } from 'src/vendors/guard/role.guard';
-import { Roles } from 'src/vendors/decorators/role.decorator';
+import { JwtAuthGuard } from 'src/third-parties/guard/jwt-auth.guard';
+import { RolesGuard } from 'src/third-parties/guard/role.guard';
+import { Roles } from 'src/third-parties/decorators/role.decorator';
+
 
 
 @ApiTags('users')

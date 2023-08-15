@@ -6,10 +6,11 @@ import { AuthController } from './auth.controller';
 
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { AccessTokenStategy } from 'src/vendors/stategy/accesstoken.stategy';
+
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from 'src/modules/users/users.module';
 import { User } from 'src/entities/user.entity';
+import { AccessTokenStategy } from 'src/third-parties/stategy/accesstoken.stategy';
 
 @Module({
   imports: [UsersModule, TypeOrmModule.forFeature([User])],

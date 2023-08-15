@@ -5,10 +5,10 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 import { LoginUserAuthDto } from './dto/login-auth.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import * as bcrypt from 'bcrypt';
-import { JwtAuthGuard } from 'src/vendors/guard/jwt-auth.guard';
+
 import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from 'src/vendors/guard/role.guard';
-import { Roles } from 'src/vendors/decorators/role.decorator';
+
+
 
 @ApiTags('auth')
 @Controller('auth')
