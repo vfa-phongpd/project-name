@@ -83,7 +83,9 @@ export class AuthController {
     const dataLogin = await this.authService.login(LoginUserDto.email, LoginUserDto.password)
     return {
       message: "success",
-      dataLogin
+      accesss_token: dataLogin.data.access_token,
+      refresh_token: dataLogin.data.refresh_token,
+
     }
   }
 

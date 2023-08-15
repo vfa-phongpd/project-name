@@ -15,14 +15,9 @@ export class UsersService {
 
   ) { }
 
-  async createUser(createUserDto: CreateUserDto, emailToken: string) {
+  async createUser(createUserDto: CreateUserDto, idUserCreate: string) {
     try {
 
-      const infoUser = await this.userRepository.findOne({ where: { email: emailToken } })
-
-      if (!infoUser) {
-        throw new BadRequestException('User Invalid');
-      }
 
       const { email } = createUserDto
       const checkEmailValid = await this.findOne(email)
@@ -41,7 +36,7 @@ export class UsersService {
         gender: createUserDto.gender,
         birthday: createUserDto.birthday,
         created_at: new Date(),
-        created_by: infoUser.id,
+        created_by: idUserCreate,
         role_id: createUserDto.role_id
       })
 

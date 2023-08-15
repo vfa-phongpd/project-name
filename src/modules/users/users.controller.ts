@@ -89,17 +89,7 @@ export class UsersController {
     }
   })
   async create(@Body() createUserDto: CreateUserDto, @Req() request) {
-    const { email } = createUserDto
-    const checkEmailValid = await this.usersService.findOne(email)
-    if (checkEmailValid) {
-      return {
-        code: "A0002",
-        status: 400,
-        messsage: "Cannot insert data to database"
-      }
-    }
-
-    this.usersService.createUser(createUserDto, request.user.email);
+    this.usersService.createUser(createUserDto, request.user.id);
     return {
       status: 200,
       message: "Success"
