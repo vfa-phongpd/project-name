@@ -2,11 +2,25 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 
 
 
-type TErrorCode = 'InternalServer' | 'InsertDataFailed' | 'QueryDataFailed' |
-    'UpdateDataFailed' | 'DeleteDataFailed' | 'ExpiredToken' | 'InvalidEmail' |
-    'InvalidPassword' | 'InvalidUsernamePassword' | 'AdminExisted' | 'InvalidToken'
-    | 'AdminNotExisted' | 'InvalidNewPassword' | 'Unauthorized' | 'InvalidOgscId' |
-    'VoucherUsed' | 'VoucherNotFound' | 'VoucherNotFound' | 'InvalidParameters' | 'UserMailNotFound'
+type TErrorCode = 'InternalServer' |
+    'InsertDataFailed' |
+    'QueryDataFailed' |
+    'UpdateDataFailed' |
+    'DeleteDataFailed' |
+    'ExpiredToken' |
+    'InvalidEmail' |
+    'InvalidPassword' |
+    'InvalidUsernamePassword' |
+    'AdminExisted' |
+    'InvalidToken' |
+    'AdminNotExisted' |
+    'InvalidNewPassword' |
+    'Unauthorized' |
+    'InvalidOgscId' |
+    'VoucherUsed' |
+    'VoucherNotFound' |
+    'InvalidParameters' |
+    'UserMailNotFound'
     | 'InvalidUsername'
 export interface IErrorResponse {
     statusCode: number;
@@ -116,7 +130,12 @@ export const ERROR_RESPONSE: Record<TErrorCode, IErrorResponse> = {
     },
 }
 
-type TSuccessCode = 'ResponseSuccess' | 'AdminLoginSuccess' | 'AdminLogoutSuccess' | 'AdminCreateSuccess' | 'SaveOmronProductWarrantiesSuccess' | 'AdminRefreshTokenSuccess';
+type TSuccessCode = 'ResponseSuccess' |
+    'AdminLoginSuccess' |
+    'AdminLogoutSuccess' |
+    'AdminCreateSuccess' |
+    'SaveOmronProductWarrantiesSuccess' |
+    'AdminRefreshTokenSuccess';
 
 // Define the interface for base success responses
 export interface BaseResponse {

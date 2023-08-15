@@ -7,25 +7,27 @@ import * as bcrypt from 'bcrypt';
 import { User } from 'src/entities/user.entity';
 import { ERROR_RESPONSE } from 'src/common/custom-exceptions';
 import { ErrorCustom } from 'src/common/error-custom';
+import { Role } from 'src/entities/role.entity';
+import { RolesService } from '../roles/roles.service';
 
 
 @Injectable()
 export class UsersService {
-
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly roleService: RolesService
 
   ) { }
 
   async createUser(createUserDto: CreateUserDto, idUserCreate: number) {
-
     const { email } = createUserDto
     const checkEmailValid = await this.findOne(email)
     if (checkEmailValid) {
       throw new ErrorCustom(ERROR_RESPONSE.InvalidEmail)
     }
-
-    const data = this.userRepository.create({
+    const roleAdmin = await this.roleService.findOne(createUserDto.role_id)
+    const roleGroup = await this.roleService.findOne(3)
+    const data = await this.userRepository.create({
       name: createUserDto.name,
       email: createUserDto.email,
       password: createUserDto.password ? await bcrypt.hash(createUserDto.password, 10) : await bcrypt.hash('member@123', 10),
@@ -33,11 +35,9 @@ export class UsersService {
       birthday: createUserDto.birthday,
       created_at: new Date(),
       created_by: idUserCreate,
-      role_id: createUserDto.role_id
+      role_id: idUserCreate === 1 ? roleAdmin : roleGroup
     })
-
-    return this.userRepository.save(data)
-
+    return await this.userRepository.save(data)
   }
 
 

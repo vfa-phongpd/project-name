@@ -97,7 +97,5 @@ export class UsersController {
     } catch (error) {
       throw error
     }
-
   }
-
 }

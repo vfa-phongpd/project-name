@@ -40,7 +40,7 @@ export class CreateUserDto {
     group_id: Group
 
     @IsNotEmpty()
-    role_id: Role
+    role_id: number | 3
 }
 
 

@@ -3,9 +3,11 @@ import { AuthService } from './auth.service';
 import { UsersService } from "../users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { User } from "../users/entities/user.entity";
+
 import { Repository } from "typeorm";
-import { mockJwtService } from "../../src/test/mocks/service/mock-jwt.service";
+import { User } from 'src/entities/user.entity';
+import { mockJwtService } from 'src/test/mocks/service/mock-jwt.service';
+
 
 
 
