@@ -4,9 +4,9 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { AppService } from 'src/app.service';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { User } from 'src/entities/user.entity';
 @Injectable()
 export class UsersService {
 
@@ -24,6 +24,15 @@ export class UsersService {
         throw new BadRequestException('User Invalid');
       }
 
+      const { email } = createUserDto
+      const checkEmailValid = await this.findOne(email)
+      if (checkEmailValid) {
+        return {
+          code: "A0002",
+          status: 400,
+          messsage: "Cannot insert data to database"
+        }
+      }
 
       const data = this.userRepository.create({
         name: createUserDto.name,

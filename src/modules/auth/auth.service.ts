@@ -4,9 +4,11 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 // import { User } from 'src/users/entities/user.entity';
-import { User } from '.././users/entities/user.entity'
+
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { User } from 'src/entities/user.entity';
+
 @Injectable()
 export class AuthService {
 

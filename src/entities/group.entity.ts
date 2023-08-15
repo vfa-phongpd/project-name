@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-import { User } from 'src/users/entities/user.entity';
+import { User } from './user.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne } from 'typeorm';
 
 

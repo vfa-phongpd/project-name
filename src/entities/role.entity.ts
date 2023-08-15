@@ -1,6 +1,7 @@
 // import { RolePermission } from 'src/role_permissions/entities/role_permission.entity';
-import { Permission } from 'src/permissions/entities/permission.entity';
-import { User } from '../../users/entities/user.entity';
+import { User } from './user.entity';
+import { Permission } from './permission.entity';
+
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 
 @Entity('roles')

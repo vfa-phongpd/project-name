@@ -1,27 +1,27 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as path from 'path';
-import { User } from './users/entities/user.entity';
 import { ConfigModule } from '@nestjs/config';
 import { dataSourceOptions } from './db/mysql';
-import { RolesModule } from './roles/roles.module';
-import { GroupsModule } from './groups/groups.module';
-import { PermissionsModule } from './permissions/permissions.module';
-import { UsersService } from './users/users.service';
-import { GroupsService } from './groups/groups.service';
-import { RolesService } from './roles/roles.service';
-import { PermissionsService } from './permissions/permissions.service';
-import { Role } from './roles/entities/role.entity';
-import { Permission } from './permissions/entities/permission.entity';
-import { Group } from './groups/entities/group.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { RolePermissionsModule } from './role_permissions/role_permissions.module';
-import { AuthModule } from './auth/auth.module';
 import { AccessTokenStategy } from './vendors/stategy/accesstoken.stategy';
+import { UsersModule } from './modules/users/users.module';
+import { UsersService } from './modules/users/users.service';
+import { RolesModule } from './modules/roles/roles.module';
+import { GroupsModule } from './modules/groups/groups.module';
+import { PermissionsModule } from './modules/permissions/permissions.module';
+import { RolePermissionsModule } from './modules/role_permissions/role_permissions.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { GroupsService } from './modules/groups/groups.service';
+import { RolesService } from './modules/roles/roles.service';
+import { PermissionsService } from './modules/permissions/permissions.service';
+import { User } from './entities/user.entity';
+import { Role } from './entities/role.entity';
+import { Permission } from './entities/permission.entity';
+import { Group } from './entities/group.entity';
 
 @Module({
   imports: [

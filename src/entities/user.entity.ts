@@ -2,8 +2,10 @@
 // import { Role } from 'src/roles/entities/role.entity';
 import { Exclude } from 'class-transformer';
 import { IsEmail, IsNotEmpty, MaxLength } from 'class-validator';
-import { Group } from '../../groups/entities/group.entity';
-import { Role } from '../../roles/entities/role.entity';
+import { Group } from './group.entity';
+import { Role } from './role.entity';
+
+
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne, Unique, OneToMany, ManyToOne } from 'typeorm';
 
 

@@ -1,6 +1,7 @@
 import { IsString, IsEmail, IsNumber, IsDate, IsOptional, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
-import { Group } from 'src/groups/entities/group.entity';
-import { Role } from 'src/roles/entities/role.entity';
+import { Group } from 'src/entities/group.entity';
+import { Role } from 'src/entities/role.entity';
+
 
 export class CreateUserDto {
 
