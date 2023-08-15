@@ -1,12 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Injectable, UseGuards, Res, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/third-parties/guard/jwt-auth.guard';
 import { RolesGuard } from 'src/third-parties/guard/role.guard';
 import { Roles } from 'src/third-parties/decorators/role.decorator';
+import { CustomResponse } from 'src/common/response_success';
+import { SUCCESS_RESPONSE } from 'src/common/custom-exceptions';
+import { Role } from 'src/common/enum/role.enum';
+
 
 
 
@@ -17,10 +19,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
 
-
-
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin group', "admin")
+  @Roles(Role.Admin, Role.Group_Admin)
   @Post('create')
   @ApiOperation({ summary: 'Create Users' })
 
@@ -91,11 +91,13 @@ export class UsersController {
     }
   })
   async create(@Body() createUserDto: CreateUserDto, @Req() request) {
-    this.usersService.createUser(createUserDto, request.user.id);
-    return {
-      status: 200,
-      message: "Success"
-    };
+    try {
+      await this.usersService.createUser(createUserDto, request.user.id);
+      return new CustomResponse(SUCCESS_RESPONSE.AdminCreateSuccess)
+    } catch (error) {
+      throw error
+    }
+
   }
 
 }
