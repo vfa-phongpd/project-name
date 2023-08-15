@@ -2,8 +2,8 @@ import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginUserAuthDto } from './dto/login-auth.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CustomResponse } from 'src/common/response_success';
-import { SUCCESS_RESPONSE } from 'src/common/custom-exceptions';
+import { CustomResponse } from '../../common/response_success';
+import { SUCCESS_RESPONSE } from '../../common/custom-exceptions';
 
 
 
@@ -81,7 +81,7 @@ export class AuthController {
       name: dataLogin.data.name,
       user_id: dataLogin.data.user_id,
       user_role: dataLogin.data.user_role,
-      accesss_token: dataLogin.data.access_token,
+      access_token: dataLogin.data.access_token,
       refresh_token: dataLogin.data.refresh_token,
     })
   }

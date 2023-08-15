@@ -7,9 +7,9 @@ import { Repository } from 'typeorm';
 
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { User } from 'src/entities/user.entity';
-import { ERROR_RESPONSE } from 'src/common/custom-exceptions';
-import { ErrorCustom } from 'src/common/error-custom';
+import { User } from '../../entities/user.entity';
+import { ERROR_RESPONSE } from '../../common/custom-exceptions';
+import { ErrorCustom } from '../../common/error-custom';
 
 @Injectable()
 export class AuthService {

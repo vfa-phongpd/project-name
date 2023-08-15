@@ -5,8 +5,8 @@ import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nes
 import { JwtAuthGuard } from 'src/third-parties/guard/jwt-auth.guard';
 import { RolesGuard } from 'src/third-parties/guard/role.guard';
 import { Roles } from 'src/third-parties/decorators/role.decorator';
-import { CustomResponse } from 'src/common/response_success';
-import { SUCCESS_RESPONSE } from 'src/common/custom-exceptions';
+import { CustomResponse } from '../../common/response_success';
+import { SUCCESS_RESPONSE } from '../../common/custom-exceptions';
 import { Role } from 'src/common/enum/role.enum';
 
 

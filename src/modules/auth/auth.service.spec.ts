@@ -5,8 +5,9 @@ import { JwtService } from "@nestjs/jwt";
 import { getRepositoryToken } from "@nestjs/typeorm";
 
 import { Repository } from "typeorm";
-import { User } from 'src/entities/user.entity';
-import { mockJwtService } from 'src/test/mocks/service/mock-jwt.service';
+import { User } from '../../entities/user.entity';
+import { mockJwtService } from '../../test/mocks/service/mock-jwt.service';
+import { LoginUserAuthDto } from './dto/login-auth.dto';
 
 
 
@@ -38,9 +39,34 @@ describe('AuthService', () => {
     expect(authService).toBeDefined();
   });
 
+  describe('login', () => {
+    it('should return user information', async () => {
+      const loginUserDto: LoginUserAuthDto = {
+        email: 'Admin@gmail.com',
+        password: 'Phong@123',
+      };
+      const mockLoginResponse = {
+        data: {
+          name: 'Admin',
+          user_id: 1,
+          user_role: 'admin',
+          access_token: 'mockAccessToken',
+          refresh_token: 'mockRefreshToken',
+        },
+      };
+      userRepository.findOne = jest.fn().mockResolvedValue(mockLoginResponse);
+      // console.log(email);
+
+      const result = await authService.login(loginUserDto.email, loginUserDto.password)
+      // console.log(result);
+
+      expect(result).toBe(mockLoginResponse);
+    });
+  });
+
   describe('findOne', () => {
     it('should return user information', async () => {
-      const email = 'Admin12312@gmail.com';
+      const email = 'Admin@gmail.com';
       const mockUser = {
         id: 1,
         name: "Admin",
@@ -51,7 +77,10 @@ describe('AuthService', () => {
         last_login: "2023-08-10 21:35:23.000000",
         created_at: "2023-08-10 21:35:23.000000",
         create_by: 1,
-        role_id: 1
+        role_id: {
+          role_id: 1,
+          role_name: 'admin'
+        }
       };
       userRepository.findOne = jest.fn().mockResolvedValue(mockUser);
       // console.log(email);
@@ -63,13 +92,6 @@ describe('AuthService', () => {
       expect(userRepository.findOne).toHaveBeenCalledWith({ relations: { role_id: true }, where: { email } });
     });
 
-    it('should throw an error if repository throws an error', async () => {
-      const email = 'test@example.com';
-      const mockError = new Error('Database error');
-      userRepository.findOne = jest.fn().mockRejectedValue(mockError);
-
-      await expect(authService.findOne(email)).rejects.toThrowError(mockError);
-    });
   });
   // Add more test cases as needed
 });

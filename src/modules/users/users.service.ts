@@ -4,9 +4,9 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { User } from 'src/entities/user.entity';
-import { ERROR_RESPONSE } from 'src/common/custom-exceptions';
-import { ErrorCustom } from 'src/common/error-custom';
+import { User } from '../../entities/user.entity';
+import { ERROR_RESPONSE } from '../../common/custom-exceptions';
+import { ErrorCustom } from '../../common/error-custom';
 import { Role } from 'src/entities/role.entity';
 import { RolesService } from '../roles/roles.service';
 

@@ -37,10 +37,10 @@ export class CreateUserDto {
 
     updated_at: Date | null;
 
-    group_id: Group
+    group_id: number
 
     @IsNotEmpty()
-    role_id: number | 3
+    role_id: number
 }
 
 
