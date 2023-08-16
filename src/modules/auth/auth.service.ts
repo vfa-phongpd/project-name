@@ -26,7 +26,7 @@ export class AuthService {
 
   async login(email: string, password: string) {
     const dataUser = await this.findOne(email)
-    if (!dataUser || dataUser.deleted_at !== null) {
+    if (!dataUser) {
       throw new ErrorCustom(ERROR_RESPONSE.InvalidEmail)
     }
     const isPasswordValid = await bcrypt.compare(password, (await dataUser).password);
@@ -36,8 +36,8 @@ export class AuthService {
     }
 
 
-    const accessToken = await this.generateAccessToken(email, dataUser.id, dataUser.role_id.role_name);
-    const refreshToken = await this.generateRefreshToken(email, dataUser.id, dataUser.role_id.role_name);
+    const accessToken = await this.generateAccessToken(email, dataUser.id, dataUser.role_id.role_id);
+    const refreshToken = await this.generateRefreshToken(email, dataUser.id, dataUser.role_id.role_id);
 
     dataUser.last_login = new Date()
     await this.userRepository.save(dataUser)
@@ -54,6 +54,15 @@ export class AuthService {
   }
 
   async findOne(email: string) {
+    try {
+      const infoUser = await this.userRepository.findOne({ relations: { role_id: true }, where: { email } })
+      return infoUser
+    } catch (error) {
+      throw new Error("Database error")
+    }
+  }
+
+  async findPermission(email: string) {
     try {
       const infoUser = await this.userRepository.findOne({ relations: { role_id: true }, where: { email } })
       return infoUser

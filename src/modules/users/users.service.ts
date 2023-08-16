@@ -9,13 +9,15 @@ import { ERROR_RESPONSE } from '../../common/custom-exceptions';
 import { ErrorCustom } from '../../common/error-custom';
 import { Role } from 'src/entities/role.entity';
 import { RolesService } from '../roles/roles.service';
+import { PermissionsService } from '../permissions/permissions.service';
 
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-    private readonly roleService: RolesService
+    private readonly roleService: RolesService,
+    private readonly permissionService: PermissionsService
 
   ) { }
 
@@ -41,8 +43,8 @@ export class UsersService {
   }
 
 
-  findAll() {
-    return `This action returns all users`;
+  findAll(role_id: any) {
+    return this.permissionService.getPermissionsForRoleId(role_id)
   }
 
   async findOne(email: string): Promise<User> {
