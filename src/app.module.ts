@@ -21,6 +21,7 @@ import { User } from './entities/user.entity';
 import { Role } from './entities/role.entity';
 import { Permission } from './entities/permission.entity';
 import { Group } from './entities/group.entity';
+import { VoucherModule } from './modules/voucher/voucher.module';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { Group } from './entities/group.entity';
       secret: process.env.accessToken,
       signOptions: { expiresIn: '1d' },
     }),
-    UsersModule, RolesModule, GroupsModule, PermissionsModule, RolePermissionsModule, AuthModule],
+    UsersModule, RolesModule, GroupsModule, PermissionsModule, RolePermissionsModule, AuthModule, VoucherModule],
   controllers: [AppController],
   providers: [AppService, UsersService, GroupsService, RolesService, PermissionsService],
 })
