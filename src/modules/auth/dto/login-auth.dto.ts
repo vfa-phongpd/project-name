@@ -3,11 +3,11 @@ import { IsEmail, IsNotEmpty, IsString, Matches, MaxLength, MinLength } from 'cl
 
 
 export class LoginUserAuthDto {
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'Email is required' })
     @IsEmail()
     email: string;
 
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'Password is required' })
     @IsString()
     @MinLength(6)
     @MaxLength(20)
