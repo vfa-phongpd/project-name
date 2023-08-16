@@ -3,6 +3,7 @@ import { User } from './user.entity';
 import { Permission } from './permission.entity';
 
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { RolePermission } from './role_permission.entity';
 
 @Entity('roles')
 export class Role {
@@ -15,8 +16,7 @@ export class Role {
     @OneToMany(() => User, (user) => user.role_id)
     users: User[];
 
-    // @ManyToMany(() => Permission)
-    // @JoinTable()
-    // permissions: Permission[];
+    @OneToMany(() => RolePermission, rolePermission => rolePermission.role_id)
+    roles_permissions: RolePermission[];
 
 }
