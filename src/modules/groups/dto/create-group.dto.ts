@@ -6,10 +6,10 @@ export class CreateGroupDto {
 
     name: string;
 
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'ID Admin is required' })
     group_admin_id: number;
 
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'Members is required' })
     members: string[];
 
     created_at: Date;
