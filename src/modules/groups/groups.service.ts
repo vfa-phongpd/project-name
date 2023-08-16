@@ -24,7 +24,7 @@ export class GroupsService {
     const checkGroupAdmin = allGroup.find(group_id => group_id.group_admin_id === group_admin_id)
 
     if (checkGroupAdmin) {
-      throw new ErrorCustom(ERROR_RESPONSE.AdminExisted)
+      throw new ErrorCustom(ERROR_RESPONSE.AdminHasGroup)
     }
     const group = new Group();
     group.name = name;
@@ -42,9 +42,6 @@ export class GroupsService {
 
 
     for (const member of membersToUpdate) {
-      if (member.group_id !== null) {
-        throw new ErrorCustom(ERROR_RESPONSE.MemberHaveGroup);
-      }
       member.updated_at = new Date()
       member.group_id = createdGroup;
     }

@@ -22,8 +22,8 @@ type TErrorCode = 'InternalServer' |
     'InvalidParameters' |
     'UserMailNotFound'
     | 'InvalidUsername'
-    | 'AdminIsExisted'
-    | 'MemberHaveGroup'
+    | 'AdminHasGroup'
+    | 'MemberHasGroup'
 export interface IErrorResponse {
     statusCode: number;
     code: string;
@@ -90,15 +90,15 @@ export const ERROR_RESPONSE: Record<TErrorCode, IErrorResponse> = {
         code: 'B0007',
         message: 'Admin is not existed',
     },
-    AdminIsExisted: {
+    AdminHasGroup: {
         statusCode: HttpStatus.BAD_REQUEST,
         code: 'B0007',
         message: 'Admin is existed',
     },
-    MemberHaveGroup: {
+    MemberHasGroup: {
         statusCode: HttpStatus.BAD_REQUEST,
         code: 'B0007',
-        message: `Member have a group`,
+        message: `Member has a group`,
     },
     InvalidNewPassword: {
         statusCode: HttpStatus.BAD_REQUEST,
