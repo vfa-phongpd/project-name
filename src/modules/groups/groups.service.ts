@@ -38,10 +38,16 @@ export class GroupsService {
       where: {
         email: In(members),
       },
+      relations: {
+        group_id: true,
+      }
     });
 
 
     for (const member of membersToUpdate) {
+      if (member.group_id) {
+        throw new ErrorCustom(ERROR_RESPONSE.MemberHasGroup)
+      }
       member.updated_at = new Date()
       member.group_id = createdGroup;
     }
