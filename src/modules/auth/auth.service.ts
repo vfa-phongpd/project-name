@@ -26,7 +26,7 @@ export class AuthService {
 
   async login(email: string, password: string) {
     const dataUser = await this.findOne(email)
-    if (dataUser.deleted_at !== null) {
+    if (!dataUser || dataUser.deleted_at !== null) {
       throw new ErrorCustom(ERROR_RESPONSE.InvalidEmail)
     }
     const isPasswordValid = await bcrypt.compare(password, (await dataUser).password);
