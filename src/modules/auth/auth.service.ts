@@ -26,7 +26,7 @@ export class AuthService {
 
   async login(email: string, password: string) {
     const dataUser = await this.findOne(email)
-    if (!dataUser) {
+    if (dataUser.deleted_at !== null) {
       throw new ErrorCustom(ERROR_RESPONSE.InvalidEmail)
     }
     const isPasswordValid = await bcrypt.compare(password, (await dataUser).password);
@@ -34,9 +34,10 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new ErrorCustom(ERROR_RESPONSE.InvalidPassword)
     }
+
+
     const accessToken = await this.generateAccessToken(email, dataUser.id, dataUser.role_id.role_name);
     const refreshToken = await this.generateRefreshToken(email, dataUser.id, dataUser.role_id.role_name);
-
 
     dataUser.last_login = new Date()
     await this.userRepository.save(dataUser)
