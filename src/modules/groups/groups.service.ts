@@ -38,8 +38,15 @@ export class GroupsService {
       where: {
         email: In(members),
       },
-    });
+      relations: {
 
+      }
+    });
+    if (!membersToUpdate) {
+      return {
+
+      }
+    }
 
     for (const member of membersToUpdate) {
       member.updated_at = new Date()
