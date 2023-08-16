@@ -36,6 +36,10 @@ export class AuthService {
     }
     const accessToken = await this.generateAccessToken(email, dataUser.id, dataUser.role_id.role_name);
     const refreshToken = await this.generateRefreshToken(email, dataUser.id, dataUser.role_id.role_name);
+
+
+    dataUser.last_login = new Date()
+    await this.userRepository.save(dataUser)
     return {
       statusCode: 200,
       data: {

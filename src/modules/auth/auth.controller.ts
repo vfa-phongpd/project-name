@@ -9,11 +9,11 @@ import { SUCCESS_RESPONSE } from '../../common/custom-exceptions';
 
 
 @ApiTags('auth')
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
-  @Post('admin/login')
+  @Post('login')
   @ApiOperation({ summary: 'Login user' })
   @ApiResponse({
     status: 200,
