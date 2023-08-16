@@ -21,6 +21,8 @@ import { User } from './entities/user.entity';
 import { Role } from './entities/role.entity';
 import { Permission } from './entities/permission.entity';
 import { Group } from './entities/group.entity';
+import { UsersService } from './users/users.service';
+import { UsersService } from './module/users/users.service';
 
 @Module({
   imports: [

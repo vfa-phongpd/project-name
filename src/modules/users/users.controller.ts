@@ -2,12 +2,12 @@ import { Controller, Get, Post, Body, UseGuards, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/third-parties/guard/jwt-auth.guard';
-import { RolesGuard } from 'src/third-parties/guard/role.guard';
-import { Roles } from 'src/third-parties/decorators/role.decorator';
+import { JwtAuthGuard } from '../../third-parties/guard/jwt-auth.guard';
+import { RolesGuard } from '../../third-parties/guard/role.guard';
+import { Roles } from '../../third-parties/decorators/role.decorator';
 import { CustomResponse } from '../../common/response_success';
 import { SUCCESS_RESPONSE } from '../../common/custom-exceptions';
-import { Role } from 'src/common/enum/role.enum';
+import { Role } from '../../common/enum/role.enum';
 
 
 
