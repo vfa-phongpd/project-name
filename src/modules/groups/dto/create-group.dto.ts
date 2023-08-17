@@ -10,7 +10,7 @@ export class CreateGroupDto {
     group_admin_id: number;
 
     @IsNotEmpty()
-    members: string[];
+    members: number[];
 
     created_at: Date;
 

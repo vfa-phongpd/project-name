@@ -24,6 +24,7 @@ type TErrorCode = 'InternalServer' |
     | 'InvalidUsername'
     | 'AdminHasGroup'
     | 'MemberHasGroup'
+    | 'UserNotExits'
 export interface IErrorResponse {
     statusCode: number;
     code: string;
@@ -139,6 +140,11 @@ export const ERROR_RESPONSE: Record<TErrorCode, IErrorResponse> = {
         statusCode: HttpStatus.BAD_REQUEST,
         code: 'B0012',
         message: 'User name is invalid',
+    },
+    UserNotExits: {
+        statusCode: HttpStatus.BAD_REQUEST,
+        code: 'USER_NOT_FOUND',
+        message: 'Not found user: ',
     },
 }
 

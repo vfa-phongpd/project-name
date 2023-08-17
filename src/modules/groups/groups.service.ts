@@ -36,17 +36,34 @@ export class GroupsService {
 
     const membersToUpdate = await this.userRepository.find({
       where: {
-        email: In(members),
+        id: In(members),
       },
       relations: {
         group_id: true,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        group_id: {
+          group_admin_id: true,
+          name: true,
+          group_id: true
+        }
       }
     });
 
+    const arrayUser = membersToUpdate.map(user => user.id)
+    const checkExits = members.filter(id => !arrayUser.includes(id))
+    console.log('checkExits', checkExits);
+
+    if (checkExits.length > 0) {
+      throw new ErrorCustom(ERROR_RESPONSE.UserNotExits, checkExits.join(', '))
+    }
 
     for (const member of membersToUpdate) {
       if (member.group_id) {
-        throw new ErrorCustom(ERROR_RESPONSE.MemberHasGroup)
+        throw new ErrorCustom(ERROR_RESPONSE.MemberHasGroup, member.id)
       }
       member.updated_at = new Date()
       member.group_id = createdGroup;

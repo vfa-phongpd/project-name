@@ -15,8 +15,7 @@ import { ApiResponse, ApiBody, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 export class GroupsController {
   constructor(private readonly groupsService: GroupsService) { }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard,)
   @Post('create')
   @ApiResponse({
     status: 200,
@@ -63,13 +62,14 @@ export class GroupsController {
         },
         members: {
           type: 'string[]',
-          example: ["phongpha1n@gmail.com", "phongpha2n@gmail.com"],
+          example: [1, 2],
           description: "Password users"
         },
 
       }
     }
   })
+  @Post('create')
   async createGroup(@Body() createGroupDto: CreateGroupDto, @Req() request) {
     await this.groupsService.create(createGroupDto, request.user.id);
     return new CustomResponse(SUCCESS_RESPONSE.ResponseSuccess)
