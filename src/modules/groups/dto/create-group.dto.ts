@@ -9,7 +9,11 @@ export class CreateGroupDto {
     @IsNotEmpty({ message: 'ID Admin is required' })
     group_admin_id: number;
 
+<<<<<<< HEAD
     @IsNotEmpty()
+=======
+    @IsNotEmpty({ message: 'Members is required' })
+>>>>>>> create-Voucher
     members: number[];
 
     created_at: Date;
