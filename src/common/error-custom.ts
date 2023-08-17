@@ -4,7 +4,10 @@ import dataSource from "typeOrm.config";
 
 
 export class ErrorCustom extends HttpException {
-    constructor(err: IErrorResponse) {
+    constructor(err: IErrorResponse, data?: any) {
+        if (data)
+            err.message += data
         super(err, err.statusCode)
+
     }
 }

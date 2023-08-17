@@ -26,32 +26,42 @@ export class GroupsService {
     if (checkGroupAdmin) {
       throw new ErrorCustom(ERROR_RESPONSE.AdminHasGroup)
     }
-    const group = new Group();
-    group.name = name;
-    group.group_admin_id = group_admin_id;
-    group.created_at = new Date();
-    group.created_by = idCreate
-
-    const createdGroup = await this.groupRepository.save(group);
+    const group = this.groupRepository.create({
+      name,
+      group_admin_id,
+      created_at: new Date(),
+      created_by: idCreate,
+    });
 
     const membersToUpdate = await this.userRepository.find({
       where: {
-        email: In(members),
+        id: In(members),
       },
       relations: {
         group_id: true,
-      }
+      },
+      select: ['id', 'name', 'email'],
     });
 
+    const arrayUser = membersToUpdate.map(user => user.id)
+    const checkExits = members.filter(id => !arrayUser.includes(id))
+    if (checkExits.length > 0) {
+      throw new ErrorCustom(ERROR_RESPONSE.UserNotExits, checkExits.join(', '))
+    }
 
     for (const member of membersToUpdate) {
       if (member.group_id) {
-        throw new ErrorCustom(ERROR_RESPONSE.MemberHasGroup)
+        throw new ErrorCustom(ERROR_RESPONSE.MemberHasGroup, member.id)
       }
-      member.updated_at = new Date()
-      member.group_id = createdGroup;
     }
-    await this.userRepository.save(membersToUpdate);
+
+    const createdGroup = await this.groupRepository.save(group);
+    const updatedMembers = membersToUpdate.map(member => {
+      member.updated_at = new Date();
+      member.group_id = createdGroup;
+      return member;
+    });
+    await this.userRepository.save(updatedMembers);
     return createdGroup;
   }
 
