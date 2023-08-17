@@ -1,34 +1,26 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { VouchersService } from './vouchers.service';
 import { CreateVoucherDto } from './dto/create-voucher.dto';
 import { UpdateVoucherDto } from './dto/update-voucher.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
-@Controller('vouchers')
+@Controller('api/voucher')
 export class VouchersController {
-  constructor(private readonly vouchersService: VouchersService) {}
+  constructor(private readonly vouchersService: VouchersService) { }
 
-  @Post()
-  create(@Body() createVoucherDto: CreateVoucherDto) {
-    return this.vouchersService.create(createVoucherDto);
+
+  @Post('create')
+  @UseInterceptors(FileInterceptor('image', {
+    storage: diskStorage({
+      destination: './upload',
+      filename: (req, file, cb) => {
+        cb(null, `${file.originalname}`)
+      }
+    })
+  }))
+  create(@Body() createVoucherDto: CreateVoucherDto, @UploadedFile() file: Express.Multer.File) {
+    return 'success'
   }
 
-  @Get()
-  findAll() {
-    return this.vouchersService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.vouchersService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateVoucherDto: UpdateVoucherDto) {
-    return this.vouchersService.update(+id, updateVoucherDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.vouchersService.remove(+id);
-  }
 }
