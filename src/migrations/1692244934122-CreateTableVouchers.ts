@@ -14,7 +14,6 @@ export class CreateTableVouchers1692244934122 implements MigrationInterface {
                         isGenerated: true,
                         generationStrategy: "increment",
                     },
-
                     {
                         name: "image",
                         type: "varchar(255)",
@@ -42,36 +41,26 @@ export class CreateTableVouchers1692244934122 implements MigrationInterface {
                         name: "created_at",
                         type: "DATETIME(6)",
                         isNullable: false,
-
-
                     },
                     {
                         name: "created_by",
                         type: "INT",
                         isNullable: false,
-
-
                     },
                     {
                         name: "updated_by",
                         type: "INT",
                         isNullable: true,
-
-
                     },
                     {
                         name: "deleted_at",
                         type: "DATETIME(6)",
                         isNullable: true,
-
-
                     },
                     {
                         name: "updated_at",
                         type: "DATETIME(6)",
                         isNullable: true,
-
-
                     },
                 ],
             }),

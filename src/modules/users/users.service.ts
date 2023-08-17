@@ -29,9 +29,9 @@ export class UsersService {
       throw new ErrorCustom(ERROR_RESPONSE.InvalidEmail)
     }
 
-    const role = await this.roleService.findOne(createUserDto.role_id)
     const checkPassword = await this.checkPasssord(createUserDto.password)
 
+    const role = await this.roleService.findOne(createUserDto.role_id)
     if (idUserCreate !== ROLE.ADMIN) {
       if (createUserDto.role_id === ROLE.ADMIN || createUserDto.role_id === ROLE.GROUP_ADMIN) {
         throw new ErrorCustom(ERROR_RESPONSE.Unauthorized)
