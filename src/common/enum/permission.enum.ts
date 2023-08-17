@@ -1,13 +1,13 @@
 export enum Permission {
 
-    Create_Member = 'create_member',
-    Update_Member = 'update_member',
-    Delete_Member = 'delete_member',
-    View_Member = 'view_member',
-    Assign_Member_To_Group = 'assign_member_to_group',
-    Create_Group = 'create_group',
-    Update_Group = 'update_group',
-    Delete_Group = 'delete_group',
-    View_Group = 'view_group',
+    CREATE_MEMBER = 'create_member',
+    UPDATE_MEMBER = 'update_member',
+    DELETE_MEMBER = 'delete_member',
+    VIEW_MEMBER = 'view_member',
+    ASSIGN_MEMBER_TO_GROUP = 'assign_member_to_group',
+    CREATE_GROUP = 'create_group',
+    UPDATE_GROUP = 'update_group',
+    DELELTE_GROUP = 'delete_group',
+    VIEW_GROUP = 'view_group',
 
 }
