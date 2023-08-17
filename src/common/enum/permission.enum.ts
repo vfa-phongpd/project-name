@@ -7,7 +7,7 @@ export enum PERMISSION {
     ASSIGN_MEMBER_TO_GROUP = 'assign_member_to_group',
     CREATE_GROUP = 'create_group',
     UPDATE_GROUP = 'update_group',
-    DELELTE_GROUP = 'delete_group',
+    DELETE_GROUP = 'delete_group',
     VIEW_GROUP = 'view_group',
 
 }

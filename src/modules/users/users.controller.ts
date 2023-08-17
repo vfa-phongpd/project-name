@@ -20,7 +20,7 @@ export class UsersController {
 
 
   @UseGuards(JwtAuthGuard, PermissionGuard)
-  @Permissions(PERMISSION.CREATE_GROUP)
+  @Permissions(PERMISSION.CREATE_MEMBER)
   @Post('create')
   @ApiOperation({ summary: 'Create Users' })
 
