@@ -26,13 +26,12 @@ export class GroupsService {
     if (checkGroupAdmin) {
       throw new ErrorCustom(ERROR_RESPONSE.AdminHasGroup)
     }
-    const group = new Group();
-    group.name = name;
-    group.group_admin_id = group_admin_id;
-    group.created_at = new Date();
-    group.created_by = idCreate
-
-    const createdGroup = await this.groupRepository.save(group);
+    const group = this.groupRepository.create({
+      name,
+      group_admin_id,
+      created_at: new Date(),
+      created_by: idCreate,
+    });
 
     const membersToUpdate = await this.userRepository.find({
       where: {
@@ -41,22 +40,11 @@ export class GroupsService {
       relations: {
         group_id: true,
       },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        group_id: {
-          group_admin_id: true,
-          name: true,
-          group_id: true
-        }
-      }
+      select: ['id', 'name', 'email'],
     });
 
     const arrayUser = membersToUpdate.map(user => user.id)
     const checkExits = members.filter(id => !arrayUser.includes(id))
-    console.log('checkExits', checkExits);
-
     if (checkExits.length > 0) {
       throw new ErrorCustom(ERROR_RESPONSE.UserNotExits, checkExits.join(', '))
     }
@@ -65,6 +53,10 @@ export class GroupsService {
       if (member.group_id) {
         throw new ErrorCustom(ERROR_RESPONSE.MemberHasGroup, member.id)
       }
+    }
+
+    const createdGroup = await this.groupRepository.save(group);
+    for (const member of membersToUpdate) {
       member.updated_at = new Date()
       member.group_id = createdGroup;
     }

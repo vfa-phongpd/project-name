@@ -99,7 +99,7 @@ export const ERROR_RESPONSE: Record<TErrorCode, IErrorResponse> = {
     MemberHasGroup: {
         statusCode: HttpStatus.BAD_REQUEST,
         code: 'B0007',
-        message: `Member has a group`,
+        message: `Member has a group `,
     },
     InvalidNewPassword: {
         statusCode: HttpStatus.BAD_REQUEST,
