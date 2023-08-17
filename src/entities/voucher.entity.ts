@@ -1,9 +1,9 @@
 import { IsNotEmpty } from "class-validator";
-import { PrimaryGeneratedColumn, Column, DeleteDateColumn, OneToMany } from "typeorm";
-import { GroupsVoucher } from "./groups_voucher.entity";
+import { PrimaryGeneratedColumn, Column, DeleteDateColumn, OneToMany, Entity } from "typeorm";
+import { GroupsVouchers } from "./groups_vouchers.entity";
 
+@Entity('vouchers')
 export class Voucher {
-
 
     @PrimaryGeneratedColumn()
     voucher_id: number;
@@ -21,7 +21,7 @@ export class Voucher {
     expired_date: Date
 
     @IsNotEmpty({ message: 'Details can not be null or empty' })
-    @Column({ type: 'text', length: 255 })
+    @Column({ type: 'text' })
     detail: string;
 
     @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
@@ -40,7 +40,7 @@ export class Voucher {
     @Column({ type: 'int', nullable: true })
     updated_by: Number;
 
-    @OneToMany(() => GroupsVoucher, groupsVouchers => groupsVouchers.voucher_id)
-    groups_vouchers: GroupsVoucher[]
+    @OneToMany(() => GroupsVouchers, groupsVouchers => groupsVouchers.voucher_id)
+    groups_vouchers: GroupsVouchers[]
 
 }

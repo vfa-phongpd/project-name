@@ -17,13 +17,9 @@ import { PERMISSION } from 'src/common/enum/permission.enum';
 export class GroupsController {
   constructor(private readonly groupsService: GroupsService) { }
 
-<<<<<<< HEAD
   @UseGuards(JwtAuthGuard, PermissionGuard)
   @Permissions(PERMISSION.CREATE_GROUP)
-=======
-  @UseGuards(JwtAuthGuard)
   @Post('create')
->>>>>>> update-api-createGroups
   @ApiResponse({
     status: 200,
     description: 'Successful create',

@@ -1,7 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne, DeleteDateColumn, OneToMany } from 'typeorm';
 
-import { GroupsVoucher } from './groups_voucher.entity';
+import { GroupsVouchers } from './groups_vouchers.entity';
 
 
 @Entity('groups')
@@ -33,7 +33,7 @@ export class Group {
     @Column({ type: 'int', nullable: true })
     updated_by: Number;
 
-    @OneToMany(() => GroupsVoucher, groupsVouchers => groupsVouchers.voucher_id)
-    groups_vouchers: GroupsVoucher[]
+    @OneToMany(() => GroupsVouchers, groupsVouchers => groupsVouchers.group_id)
+    groups_vouchers: GroupsVouchers[]
 
 }

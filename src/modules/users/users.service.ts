@@ -23,13 +23,13 @@ export class UsersService {
 
   async createUser(createUserDto: CreateUserDto, idUserCreate: number) {
     const { email } = createUserDto
-    const checkEmailValid = await this.findOne(email)
+    const checkEmailInValid = await this.findOne(email)
 
-    if (checkEmailValid) {
+    if (checkEmailInValid) {
       throw new ErrorCustom(ERROR_RESPONSE.InvalidEmail)
     }
 
-    const checkPassword = await this.checkPasssord(createUserDto.password)
+    const checkPassword = await this.checkPassord(createUserDto.password)
 
     const role = await this.roleService.findOne(createUserDto.role_id)
     if (idUserCreate !== ROLE.ADMIN) {
@@ -66,7 +66,7 @@ export class UsersService {
     }
   }
 
-  async checkPasssord(password: string) {
+  async checkPassord(password: string) {
     if (password) {
       return await bcrypt.hash(password, 10)
     }
