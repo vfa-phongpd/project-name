@@ -56,11 +56,12 @@ export class GroupsService {
     }
 
     const createdGroup = await this.groupRepository.save(group);
-    for (const member of membersToUpdate) {
-      member.updated_at = new Date()
+    const updatedMembers = membersToUpdate.map(member => {
+      member.updated_at = new Date();
       member.group_id = createdGroup;
-    }
-    await this.userRepository.save(membersToUpdate);
+      return member;
+    });
+    await this.userRepository.save(updatedMembers);
     return createdGroup;
   }
 

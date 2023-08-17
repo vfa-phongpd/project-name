@@ -15,7 +15,7 @@ import { ApiResponse, ApiBody, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 export class GroupsController {
   constructor(private readonly groupsService: GroupsService) { }
 
-  @UseGuards(JwtAuthGuard,)
+  @UseGuards(JwtAuthGuard)
   @Post('create')
   @ApiResponse({
     status: 200,
