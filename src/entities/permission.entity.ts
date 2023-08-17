@@ -2,18 +2,19 @@
 import { IsNotEmpty } from 'class-validator';
 import { Role } from './role.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne, OneToMany, ManyToMany } from 'typeorm';
+import { RolePermission } from './role_permission.entity';
 
 @Entity('permissions')
 export class Permission {
     @PrimaryGeneratedColumn()
-    id: number;
+    permission_id: number;
 
     @IsNotEmpty({ message: 'Name can not be null or empty' })
-    @Column({ type: 'varchar', length: 50, nullable: false, name: 'permissionname', unique: true })
+    @Column({ type: 'varchar', length: 50, nullable: false, unique: true })
     permission_name: string;
 
-    // @ManyToMany(() => Role, Role => Role.permissions)
-    // roles: Role[];
+    @OneToMany(() => RolePermission, rolePermission => rolePermission.permission_id)
+    roles_permissions: RolePermission[];
 }
 
 

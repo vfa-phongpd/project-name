@@ -3,11 +3,11 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/third-parties/guard/jwt-auth.guard';
-import { RolesGuard } from 'src/third-parties/guard/role.guard';
-import { Roles } from 'src/third-parties/decorators/role.decorator';
 import { CustomResponse } from '../../common/response_success';
 import { SUCCESS_RESPONSE } from '../../common/custom-exceptions';
-import { Role } from 'src/common/enum/role.enum';
+import { PermissionGuard } from 'src/third-parties/guard/permission.guard';
+import { Permissions } from 'src/third-parties/decorators/permission.decorator';
+import { PERMISSION } from 'src/common/enum/permission.enum';
 
 
 
@@ -19,8 +19,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.Admin, Role.Group_Admin)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
+  @Permissions(PERMISSION.CREATE_MEMBER)
   @Post('create')
   @ApiOperation({ summary: 'Create Users' })
 
@@ -98,4 +98,5 @@ export class UsersController {
       throw error
     }
   }
+
 }

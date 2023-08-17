@@ -5,9 +5,11 @@ import { SUCCESS_RESPONSE } from 'src/common/custom-exceptions';
 import { CustomResponse } from 'src/common/response_success';
 import { JwtAuthGuard } from 'src/third-parties/guard/jwt-auth.guard';
 import { RolesGuard } from 'src/third-parties/guard/role.guard';
-import { Roles } from 'src/third-parties/decorators/role.decorator';
-import { Role } from 'src/common/enum/role.enum';
+
 import { ApiResponse, ApiBody, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { PermissionGuard } from 'src/third-parties/guard/permission.guard';
+import { Permissions } from 'src/third-parties/decorators/permission.decorator';
+import { PERMISSION } from 'src/common/enum/permission.enum';
 
 @ApiTags('groups')
 @Controller('api/groups')
@@ -15,9 +17,8 @@ import { ApiResponse, ApiBody, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 export class GroupsController {
   constructor(private readonly groupsService: GroupsService) { }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.Admin)
-  @Post('create')
+  @UseGuards(JwtAuthGuard, PermissionGuard)
+  @Permissions(PERMISSION.CREATE_GROUP)
   @ApiResponse({
     status: 200,
     description: 'Successful create',

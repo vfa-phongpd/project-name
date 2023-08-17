@@ -6,7 +6,7 @@ import { Group } from './group.entity';
 import { Role } from './role.entity';
 
 
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne, Unique, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne, Unique, OneToMany, ManyToOne, DeleteDateColumn } from 'typeorm';
 
 
 
@@ -61,6 +61,7 @@ export class User {
     updated_by: Number;
 
     @Column({ type: 'datetime', default: null, nullable: true })
+    @DeleteDateColumn()
     deleted_at: Date;
 
     @Column({ type: 'datetime', nullable: true })

@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 import { User } from './user.entity';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne, DeleteDateColumn } from 'typeorm';
 
 
 @Entity('groups')
@@ -28,6 +28,7 @@ export class Group {
 
 
     @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP', nullable: true })
+    @DeleteDateColumn()
     updated_at: Date;
 
     @Column({ type: 'int', nullable: true })

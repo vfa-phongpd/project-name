@@ -34,8 +34,13 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new ErrorCustom(ERROR_RESPONSE.InvalidPassword)
     }
-    const accessToken = await this.generateAccessToken(email, dataUser.id, dataUser.role_id.role_name);
-    const refreshToken = await this.generateRefreshToken(email, dataUser.id, dataUser.role_id.role_name);
+
+
+    const accessToken = await this.generateAccessToken(email, dataUser.id, dataUser.role_id.role_id);
+    const refreshToken = await this.generateRefreshToken(email, dataUser.id, dataUser.role_id.role_id);
+
+    dataUser.last_login = new Date()
+    await this.userRepository.save(dataUser)
     return {
       statusCode: 200,
       data: {
@@ -56,6 +61,7 @@ export class AuthService {
       throw new Error("Database error")
     }
   }
+
 
   update(id: number, updateAuthDto: UpdateAuthDto) {
     return `This action updates a #${id} auth`;
