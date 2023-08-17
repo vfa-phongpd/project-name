@@ -71,6 +71,7 @@ export class GroupsController {
       }
     }
   })
+  @Post('create')
   async createGroup(@Body() createGroupDto: CreateGroupDto, @Req() request) {
     await this.groupsService.create(createGroupDto, request.user.id);
     return new CustomResponse(SUCCESS_RESPONSE.ResponseSuccess)
