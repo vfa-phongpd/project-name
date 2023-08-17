@@ -7,10 +7,10 @@ import * as bcrypt from 'bcrypt';
 import { User } from '../../entities/user.entity';
 import { ERROR_RESPONSE } from '../../common/custom-exceptions';
 import { ErrorCustom } from '../../common/error-custom';
-import { Role } from 'src/entities/role.entity';
 import { RolesService } from '../roles/roles.service';
 import { PermissionsService } from '../permissions/permissions.service';
-
+import { PASSWORD } from 'src/common/enum/password.enum.';
+import { ROLE } from 'src/common/enum/role.enum';
 
 @Injectable()
 export class UsersService {
@@ -24,20 +24,29 @@ export class UsersService {
   async createUser(createUserDto: CreateUserDto, idUserCreate: number) {
     const { email } = createUserDto
     const checkEmailValid = await this.findOne(email)
+
     if (checkEmailValid) {
       throw new ErrorCustom(ERROR_RESPONSE.InvalidEmail)
     }
-    const roleAdmin = await this.roleService.findOne(createUserDto.role_id)
-    const roleGroup = await this.roleService.findOne(3)
+
+    const role = await this.roleService.findOne(createUserDto.role_id)
+    const checkPassword = await this.checkPasssord(createUserDto.password)
+
+    if (idUserCreate !== ROLE.ADMIN) {
+      if (createUserDto.role_id === ROLE.ADMIN || createUserDto.role_id === ROLE.GROUP_ADMIN) {
+        throw new ErrorCustom(ERROR_RESPONSE.Unauthorized)
+      }
+    }
+
     const data = await this.userRepository.create({
       name: createUserDto.name,
       email: createUserDto.email,
-      password: createUserDto.password ? await bcrypt.hash(createUserDto.password, 10) : await bcrypt.hash('member@123', 10),
+      password: checkPassword,
       gender: createUserDto.gender,
       birthday: createUserDto.birthday,
       created_at: new Date(),
       created_by: idUserCreate,
-      role_id: idUserCreate === 1 ? roleAdmin : roleGroup
+      role_id: role
     })
     return await this.userRepository.save(data)
   }
@@ -57,12 +66,11 @@ export class UsersService {
     }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async checkPasssord(password: string) {
+    if (password) {
+      return await bcrypt.hash(password, 10)
+    }
+    return await bcrypt.hash(PASSWORD.PASSWORD_DEFAULT, 10)
   }
 
 
