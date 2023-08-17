@@ -62,14 +62,6 @@ export class AuthService {
     }
   }
 
-  async findPermission(email: string) {
-    try {
-      const infoUser = await this.userRepository.findOne({ relations: { role_id: true }, where: { email } })
-      return infoUser
-    } catch (error) {
-      throw new Error("Database error")
-    }
-  }
 
   update(id: number, updateAuthDto: UpdateAuthDto) {
     return `This action updates a #${id} auth`;

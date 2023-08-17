@@ -7,10 +7,8 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class PermissionsService {
-
   @InjectRepository(Permission)
   private readonly permissionRepository: Repository<Permission>
-
 
   async getPermissionsForRoleId(roleId: number): Promise<Permission[]> {
     const permissions = await this.permissionRepository
