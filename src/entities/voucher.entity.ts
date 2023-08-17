@@ -1,21 +1,28 @@
-import { IsNotEmpty } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne, DeleteDateColumn, OneToMany } from 'typeorm';
+import { IsNotEmpty } from "class-validator";
+import { PrimaryGeneratedColumn, Column, DeleteDateColumn, OneToMany } from "typeorm";
+import { GroupsVoucher } from "./groups_voucher.entity";
 
-import { GroupsVoucher } from './groups_voucher.entity';
+export class Voucher {
 
-
-@Entity('groups')
-export class Group {
 
     @PrimaryGeneratedColumn()
-    group_id: number;
+    voucher_id: number;
+
+    @IsNotEmpty({ message: 'Image can not be null or empty' })
+    @Column()
+    image: string
 
     @IsNotEmpty({ message: 'Name can not be null or empty' })
-    @Column({ type: 'varchar', length: 50, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 255 })
     name: string;
 
+    @IsNotEmpty({ message: 'Expired_date can not be null or empty' })
     @Column()
-    group_admin_id: number
+    expired_date: Date
+
+    @IsNotEmpty({ message: 'Details can not be null or empty' })
+    @Column({ type: 'text', length: 255 })
+    detail: string;
 
     @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
     created_at: Date;
