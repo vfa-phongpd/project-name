@@ -7,21 +7,21 @@ export class CreateUserDto {
 
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'Name is required' })
     name: string;
 
     @IsEmail()
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'Email is required' })
     email: string;
 
 
     password: string;
 
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'Gender is required 1 or 0' })
     @IsNumber()
     gender: number;
 
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'Birthday is required' })
     birthday: Date;
 
 
@@ -39,7 +39,7 @@ export class CreateUserDto {
 
     group_id: number
 
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'Role is required' })
     role_id: number
 }
 
