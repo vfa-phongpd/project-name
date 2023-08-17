@@ -9,7 +9,7 @@ import { RolesGuard } from 'src/third-parties/guard/role.guard';
 import { ApiResponse, ApiBody, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { PermissionGuard } from 'src/third-parties/guard/permission.guard';
 import { Permissions } from 'src/third-parties/decorators/permission.decorator';
-import { Permission } from 'src/common/enum/permission.enum';
+import { PERMISSION } from 'src/common/enum/permission.enum';
 
 @ApiTags('groups')
 @Controller('api/groups')
@@ -18,7 +18,7 @@ export class GroupsController {
   constructor(private readonly groupsService: GroupsService) { }
 
   @UseGuards(JwtAuthGuard, PermissionGuard)
-  @Permissions(Permission.CREATE_GROUP)
+  @Permissions(PERMISSION.CREATE_GROUP)
   @ApiResponse({
     status: 200,
     description: 'Successful create',

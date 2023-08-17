@@ -1,4 +1,4 @@
-export enum Permission {
+export enum PERMISSION {
 
     CREATE_MEMBER = 'create_member',
     UPDATE_MEMBER = 'update_member',

@@ -7,7 +7,7 @@ import { CustomResponse } from '../../common/response_success';
 import { SUCCESS_RESPONSE } from '../../common/custom-exceptions';
 import { PermissionGuard } from 'src/third-parties/guard/permission.guard';
 import { Permissions } from 'src/third-parties/decorators/permission.decorator';
-import { Permission } from 'src/common/enum/permission.enum';
+import { PERMISSION } from 'src/common/enum/permission.enum';
 
 
 
@@ -20,7 +20,7 @@ export class UsersController {
 
 
   @UseGuards(JwtAuthGuard, PermissionGuard)
-  @Permissions(Permission.CREATE_GROUP)
+  @Permissions(PERMISSION.CREATE_GROUP)
   @Post('create')
   @ApiOperation({ summary: 'Create Users' })
 
