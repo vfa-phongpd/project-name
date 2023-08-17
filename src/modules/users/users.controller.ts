@@ -9,15 +9,11 @@ import { PermissionGuard } from 'src/third-parties/guard/permission.guard';
 import { Permissions } from 'src/third-parties/decorators/permission.decorator';
 import { PERMISSION } from 'src/common/enum/permission.enum';
 
-
-
-
 @ApiTags('users')
 @Controller('api/users')
 @ApiBearerAuth()
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
-
 
   @UseGuards(JwtAuthGuard, PermissionGuard)
   @Permissions(PERMISSION.CREATE_MEMBER)

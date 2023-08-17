@@ -1,10 +1,11 @@
-import { IsString, IsEmail, IsNumber, IsDate, IsOptional, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
+import { IsString, IsEmail, IsNumber, IsDate, IsOptional, IsNotEmpty, MinLength, MaxLength, IsIn } from 'class-validator';
+import { ROLE } from 'src/common/enum/role.enum';
 import { Group } from 'src/entities/group.entity';
 import { Role } from 'src/entities/role.entity';
 
 
-export class CreateUserDto {
 
+export class CreateUserDto {
 
     @IsString()
     @IsNotEmpty({ message: 'Name is required' })
@@ -24,22 +25,10 @@ export class CreateUserDto {
     @IsNotEmpty({ message: 'Birthday is required' })
     birthday: Date;
 
-
-    last_login: Date | null;
-
-    created_at: Date;
-
-    created_by: number;
-
-    updated_by: number | null;
-
-    deleted_at: Date | null;
-
-    updated_at: Date | null;
-
     group_id: number
 
     @IsNotEmpty({ message: 'Role is required' })
+    @IsIn([ROLE.ADMIN, ROLE.GROUP_ADMIN, ROLE.MEMBER], { message: 'Invalid role' })
     role_id: number
 }
 
