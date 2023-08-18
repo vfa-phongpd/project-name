@@ -20,7 +20,6 @@ export class VouchersService {
 
   async createVoucher(createVoucherDto: CreateVoucherDto, pathImage: string) {
     const { assign_groups } = createVoucherDto
-    console.log("assign_groups", assign_groups);
 
     if (!pathImage) {
       throw new ErrorCustom(ERROR_RESPONSE.ImageIsRequired)
@@ -52,7 +51,7 @@ export class VouchersService {
         group_id: groups.group_id,
         voucher_id: createdVoucher
       })
-      // this.groupsVouchersRepository.save(saveGroupsVouchers)
+      this.groupsVouchersRepository.save(saveGroupsVouchers)
     }
     return createdVoucher;
 
