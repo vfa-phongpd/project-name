@@ -20,7 +20,7 @@ export class VouchersService {
 
   async createVoucher(createVoucherDto: CreateVoucherDto, pathImage: string) {
     const { assign_groups } = createVoucherDto
-    console.log(assign_groups);
+    console.log("assign_groups", assign_groups);
 
     if (!pathImage) {
       throw new ErrorCustom(ERROR_RESPONSE.ImageIsRequired)
@@ -29,7 +29,8 @@ export class VouchersService {
       image: pathImage,
       name: createVoucherDto.name,
       expired_date: createVoucherDto.expired_date,
-      detail: createVoucherDto.detail
+      detail: createVoucherDto.detail,
+      created_at: new Date()
     })
 
 
@@ -38,7 +39,6 @@ export class VouchersService {
         group_id: In(assign_groups),
       },
     });
-    console.log(findGroup);
 
     const arrayUser = findGroup.map(group => group.group_id)
     const checkExits = assign_groups.filter(id => !arrayUser.includes(id))
@@ -49,10 +49,10 @@ export class VouchersService {
     const createdVoucher = await this.voucherRepository.save(newVoucher);
     for (const groups of findGroup) {
       const saveGroupsVouchers = await this.groupsVouchersRepository.create({
-        group_id: groups,
+        group_id: groups.group_id,
         voucher_id: createdVoucher
       })
-      this.groupsVouchersRepository.save(saveGroupsVouchers)
+      // this.groupsVouchersRepository.save(saveGroupsVouchers)
     }
     return createdVoucher;
 

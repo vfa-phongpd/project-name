@@ -40,7 +40,7 @@ export class Voucher {
     @Column({ type: 'int', nullable: true })
     updated_by: Number;
 
-    @OneToMany(() => GroupsVouchers, groupsVouchers => groupsVouchers.voucher_id)
+    @OneToMany(() => GroupsVouchers, groupsVouchers => groupsVouchers.voucher)
     groups_vouchers: GroupsVouchers[]
 
 }

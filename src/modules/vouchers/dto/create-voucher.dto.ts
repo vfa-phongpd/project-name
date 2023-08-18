@@ -1,6 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Transform, Type } from "class-transformer";
-import { IsInt, IsNotEmpty, IsNumber } from "class-validator";
+import { Type } from "class-transformer";
+import { IsNotEmpty, IsNumber } from "class-validator";
 
 export class CreateVoucherDto {
 
@@ -16,5 +15,6 @@ export class CreateVoucherDto {
 
     @IsNotEmpty({ message: 'Assign_groups is required' })
     @Type(() => Number)
+    @IsNumber({}, { each: true, message: 'Assign_groups must is Number' })
     assign_groups: number[];
 }
