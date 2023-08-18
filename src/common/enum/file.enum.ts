@@ -10,5 +10,7 @@ export enum TYPE_FILE {
 
 export enum FILE {
     DISTINATION = './upload',
-    FILE_INTERCEPTOR = 'image'
+    UPLOAD_DISTINATION = './vouchers/',
+    FILE_INTERCEPTOR = 'image',
+    UPLOAD_INTERCEPTOR = 'uploaded_file'
 }
