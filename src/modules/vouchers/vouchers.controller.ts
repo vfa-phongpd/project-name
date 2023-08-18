@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, UsePipes, ValidationPipe } from '@nestjs/common';
 import { VouchersService } from './vouchers.service';
 import { CreateVoucherDto } from './dto/create-voucher.dto';
 import { UpdateVoucherDto } from './dto/update-voucher.dto';
@@ -19,8 +19,10 @@ export class VouchersController {
       }
     })
   }))
+  @UsePipes(new ValidationPipe({ transform: true }))
   create(@Body() createVoucherDto: CreateVoucherDto, @UploadedFile() file: Express.Multer.File) {
-    return 'success'
+    return this.vouchersService.createVoucher(createVoucherDto, file.path)
   }
+  //
 
 }

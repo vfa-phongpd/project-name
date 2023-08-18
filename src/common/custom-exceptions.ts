@@ -25,6 +25,8 @@ type TErrorCode = 'InternalServer' |
     | 'AdminHasGroup'
     | 'MemberHasGroup'
     | 'UserNotExits'
+    | 'ImageIsRequired'
+    | 'GroupNotExits'
 export interface IErrorResponse {
     statusCode: number;
     code: string;
@@ -145,6 +147,16 @@ export const ERROR_RESPONSE: Record<TErrorCode, IErrorResponse> = {
         statusCode: HttpStatus.BAD_REQUEST,
         code: 'USER_NOT_FOUND',
         message: 'Not found user: ',
+    },
+    ImageIsRequired: {
+        statusCode: HttpStatus.BAD_REQUEST,
+        code: 'A0005',
+        message: 'Image is required',
+    },
+    GroupNotExits: {
+        statusCode: HttpStatus.BAD_REQUEST,
+        code: 'USER_NOT_FOUND',
+        message: 'Not found group: ',
     },
 }
 

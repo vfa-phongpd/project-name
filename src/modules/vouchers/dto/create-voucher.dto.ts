@@ -1,9 +1,9 @@
-import { IsNotEmpty } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { Transform, Type } from "class-transformer";
+import { IsInt, IsNotEmpty, IsNumber } from "class-validator";
 
 export class CreateVoucherDto {
 
-    @IsNotEmpty({ message: 'Image is required' })
-    image: string;
 
     @IsNotEmpty({ message: 'Name is required' })
     name: string;
@@ -15,5 +15,6 @@ export class CreateVoucherDto {
     detail: string;
 
     @IsNotEmpty({ message: 'Assign_groups is required' })
-    assign_groups: string[];
+    @Type(() => Number)
+    assign_groups: number[];
 }

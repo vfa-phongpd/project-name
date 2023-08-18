@@ -19,6 +19,8 @@ export class GroupsService {
 
   async create(createGroupDto: CreateGroupDto, idCreate: number) {
     const { name, group_admin_id, members } = createGroupDto;
+    console.log(members);
+
 
     const allGroup = await this.findAllGroup()
     const checkGroupAdmin = allGroup.find(group_id => group_id.group_admin_id === group_admin_id)
