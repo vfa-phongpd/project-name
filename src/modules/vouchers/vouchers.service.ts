@@ -18,7 +18,7 @@ export class VouchersService {
 
   ) { }
 
-  async createVoucher(createVoucherDto: CreateVoucherDto, pathImage: string) {
+  async createVoucher(createVoucherDto: CreateVoucherDto, pathImage: string, idUserCreate) {
     const { assign_groups } = createVoucherDto
 
     if (!pathImage) {
@@ -29,7 +29,8 @@ export class VouchersService {
       name: createVoucherDto.name,
       expired_date: createVoucherDto.expired_date,
       detail: createVoucherDto.detail,
-      created_at: new Date()
+      created_at: new Date(),
+      created_by: idUserCreate
     })
 
 

@@ -46,6 +46,9 @@ export class InsertData1691982691847 implements MigrationInterface {
                         '1', 'Admin', 'Admin@gmail.com', '$2b$10$9xMrfyGz6euLjOhpSov5yOr0kifPKXQTobLbaYlzxAzkP8dFBpAlq', '1', '2001-08-29', '2023-08-10 21:35:23.000000', '2023-08-10 21:23:07.000000', '1', NULL, NULL, NULL, NULL, '1'
                     )
                 `);
+
+
+
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {

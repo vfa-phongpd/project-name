@@ -17,7 +17,6 @@ export class CreateTableVouchers1692244934122 implements MigrationInterface {
                     {
                         name: "image",
                         type: "varchar(255)",
-
                     },
                     {
                         name: "name",
