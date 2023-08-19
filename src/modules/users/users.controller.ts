@@ -95,4 +95,11 @@ export class UsersController {
     }
   }
 
+
+
+  @Get('get')
+  get() {
+    return this.usersService.getUsersWithVouchers()
+  }
+
 }

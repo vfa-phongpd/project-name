@@ -120,4 +120,15 @@ export class VouchersService {
   }
 
 
+  async getUsersHaveVouchers(group_id: number): Promise<Voucher[]> {
+    const permissions = await this.voucherRepository
+      .createQueryBuilder('voucher')
+      .innerJoin('voucher.groups_vouchers', 'groups_vouchers')
+      .where('groups_vouchers.group_id = :group_id', { group_id })
+      .getMany();
+
+    return permissions;
+  }
+
+
 }

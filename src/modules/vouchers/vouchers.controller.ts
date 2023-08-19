@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UploadedFile, UseGuards, UseInterceptors, Req, Res } from '@nestjs/common';
+import { Body, Controller, Post, UploadedFile, UseGuards, UseInterceptors, Req, Res, Get } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { ERROR_RESPONSE, SUCCESS_RESPONSE } from 'src/common/custom-exceptions';
@@ -93,5 +93,11 @@ export class VouchersController {
     } else {
       response.status(400).json(uplaodRes);
     }
+  }
+
+
+  @Get('get')
+  get(@Body() voucher_id: number) {
+    return this.vouchersService.getUsersHaveVouchers(voucher_id)
   }
 }

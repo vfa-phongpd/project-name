@@ -1,6 +1,7 @@
 import { IsNotEmpty } from "class-validator";
 import { PrimaryGeneratedColumn, Column, DeleteDateColumn, OneToMany, Entity } from "typeorm";
 import { GroupsVouchers } from "./groups_vouchers.entity";
+import { UsersUsedVoucher } from "./users_used_voucher.entity";
 
 @Entity('vouchers')
 export class Voucher {
@@ -42,5 +43,8 @@ export class Voucher {
 
     @OneToMany(() => GroupsVouchers, groupsVouchers => groupsVouchers.voucher)
     groups_vouchers: GroupsVouchers[]
+
+    @OneToMany(() => UsersUsedVoucher, UsersUsedVoucher => UsersUsedVoucher.voucher)
+    users_used_vouchers: UsersUsedVoucher[]
 
 }

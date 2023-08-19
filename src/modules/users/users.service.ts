@@ -73,5 +73,14 @@ export class UsersService {
   }
 
 
+  async getUsersWithVouchers(): Promise<User[]> {
+    return this.userRepository.createQueryBuilder('user')
+      .leftJoinAndSelect('user.group_id', 'group')
+      .leftJoinAndSelect('group.groups_vouchers', 'groups_vouchers')
+      .leftJoinAndSelect('groups_vouchers.voucher_id', 'voucher_id')
+      .getMany();
+  }
+
+
 
 }
