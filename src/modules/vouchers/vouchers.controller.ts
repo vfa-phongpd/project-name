@@ -7,41 +7,55 @@ import { CreateVoucherDto } from './dto/create-voucher.dto';
 import { VouchersService } from './vouchers.service';
 import { CustomResponse } from 'src/common/response_success';
 import { FILE, FILE_SIZE, TYPE_FILE } from 'src/common/enum/file.enum';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/third-parties/guard/jwt-auth.guard';
 import { config } from "../../config";
 import { S3 } from "aws-sdk";
+import { S3Service } from './s3.service';
+import { multerOptionsCreateVouchers, multerOptionsUploadVouchers } from 'src/third-parties/interceptors/create-voucher.interceptor';
 
 type FileNameCallback = (error: Error | null, filename: string) => void
 
+@ApiTags('vouchers')
 @Controller('api/voucher')
 @ApiBearerAuth()
 export class VouchersController {
-  constructor(private readonly vouchersService: VouchersService) { }
+  constructor(private readonly vouchersService: VouchersService,
+    private readonly s3Service: S3Service
+  ) { }
 
   @Post('create')
-  @UseInterceptors(FileInterceptor(FILE.FILE_INTERCEPTOR, {
-    storage: diskStorage({
-      destination: FILE.DISTINATION,
-      filename: (req, file, cb) => {
-        cb(null, `${file.originalname}`)
+  @ApiResponse({
+    status: 200,
+    description: 'Successful create',
+    // Define your response schema here
+    schema: {
+      properties: {
+        statusCode: { type: 'number' },
+        data: {
+          type: 'object',
+          properties: {
+            status: { type: 'int' },
+            messsage: { type: 'string' }
+          },
+        },
       },
-
-    }),
-    limits: {
-      fileSize: FILE_SIZE.FILE_SIZE_REQUIRE // (vd: 1MB)
     },
-    fileFilter: (req, file, cb) => {
-      if ((file.mimetype === TYPE_FILE.PNG ||
-        file.mimetype === TYPE_FILE.JPEG ||
-        file.mimetype === TYPE_FILE.JPG
-      )) {
-        cb(null, true);
-      } else {
-        cb(new ErrorCustom(ERROR_RESPONSE.ImageFormat), false);
-      }
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiResponse({
+    status: 500,
+    description: 'Internal server error',
+    // Define your error response schema here
+    schema: {
+      properties: {
+        code: { type: 'string' },
+        status: { type: 'number' },
+        message: { type: 'string' },
+      },
     },
-  }))
+  })
+  @UseInterceptors(FileInterceptor(FILE.FILE_INTERCEPTOR, multerOptionsCreateVouchers))
   @UseGuards(JwtAuthGuard)
   async create(@Body() createVoucherDto: CreateVoucherDto, @UploadedFile() file: Express.Multer.File, @Req() request) {
     if (!file) {
@@ -55,39 +69,46 @@ export class VouchersController {
   }
 
 
-
-  @Post('upload')
-  @UseInterceptors(FileInterceptor(FILE.UPLOAD_INTERCEPTOR, {
-    storage: diskStorage({
-      destination: FILE.UPLOAD_DISTINATION,
-      filename: (req, file, cb: FileNameCallback) => {
-        const timestamp = new Date().getTime();
-        cb(null, ` ${timestamp}_${file.originalname}`)
+  @ApiResponse({
+    status: 200,
+    description: 'Successful create',
+    // Define your response schema here
+    schema: {
+      properties: {
+        statusCode: { type: 'number' },
+        data: {
+          type: 'object',
+          properties: {
+            status: { type: 'int' },
+            messsage: { type: 'string' }
+          },
+        },
       },
-
-    }),
-    limits: {
-      fileSize: FILE_SIZE.FILE_SIZE_REQUIRE // (vd: 1MB)
     },
-    fileFilter: (req, file, cb) => {
-      if ((file.mimetype === TYPE_FILE.PNG ||
-        file.mimetype === TYPE_FILE.JPEG ||
-        file.mimetype === TYPE_FILE.JPG
-      )) {
-        cb(null, true);
-      } else {
-        cb(new ErrorCustom(ERROR_RESPONSE.ImageFormat), false);
-      }
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal server error',
+    // Define your error response schema here
+    schema: {
+      properties: {
+        code: { type: 'string' },
+        status: { type: 'number' },
+        message: { type: 'string' },
+      },
     },
-  }))
+  })
+  @ApiConsumes('multipart/form-data')
+  @Post('upload')
+  @UseInterceptors(FileInterceptor(FILE.UPLOAD_INTERCEPTOR, multerOptionsUploadVouchers))
   async upload(@UploadedFile() file: Express.Multer.File, @Req() request, @Res() response) {
     const s3 = new S3({
       accessKeyId: config.aws_access_key_id,
       secretAccessKey: config.aws_secret_access_key,
     });
     // Initialize bucket
-    await this.vouchersService.initBucket(s3);
-    const uplaodRes = await this.vouchersService.uploadToS3(s3, file);
+    await this.s3Service.initBucket(s3);
+    const uplaodRes = await this.s3Service.uploadToS3(s3, file);
     if (uplaodRes.success) {
       response.status(200).json(uplaodRes);
     } else {
