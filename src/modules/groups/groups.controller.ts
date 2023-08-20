@@ -49,32 +49,9 @@ export class GroupsController {
       },
     },
   })
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        name: {
-          type: 'string',
-          example: "ABC",
-          description: 'name users'
-        },
-        group_admin_id: {
-          type: 'string',
-          example: '2',
-          description: "email users"
-        },
-        members: {
-          type: 'string[]',
-          example: [1, 2],
-          description: "Password users"
-        },
-
-      }
-    }
-  })
   @Post('create')
   async createGroup(@Body() createGroupDto: CreateGroupDto, @Req() request) {
-    await this.groupsService.create(createGroupDto, request.user.id);
+    await this.groupsService.createGroups(createGroupDto, request.user.id);
     return new CustomResponse(SUCCESS_RESPONSE.ResponseSuccess)
   }
 
