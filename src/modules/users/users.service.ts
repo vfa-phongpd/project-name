@@ -74,10 +74,6 @@ export class UsersService {
       const infoUser = await this.userRepository.findOne({ where: { email } })
       return infoUser
     } catch (error) {
-<<<<<<< HEAD
-
-=======
->>>>>>> create-voucher
     }
   }
 

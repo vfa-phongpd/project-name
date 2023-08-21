@@ -70,8 +70,6 @@ export class GroupsService {
       return findAllGroup
     } catch (error) {
 
-<<<<<<< HEAD
-=======
     }
   }
 
@@ -98,7 +96,6 @@ export class GroupsService {
     const checkExits = members.filter(id => !arrayUser.includes(id))
     if (checkExits.length > 0) {
       throw new ErrorCustom(ERROR_RESPONSE.UserNotExits, checkExits.join(', '))
->>>>>>> create-voucher
     }
 
     for (const member of membersToCreate) {

@@ -117,10 +117,6 @@ export class AuthService {
       const infoUser = await this.userRepository.findOne({ relations: { role_id: true }, where: { email } })
       return infoUser.role_id.role_name
     } catch (error) {
-<<<<<<< HEAD
-
-=======
->>>>>>> create-voucher
     }
   }
 }
