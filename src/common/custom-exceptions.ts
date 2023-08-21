@@ -25,6 +25,10 @@ type TErrorCode = 'InternalServer' |
     | 'AdminHasGroup'
     | 'MemberHasGroup'
     | 'UserNotExits'
+    | 'ImageIsRequired'
+    | 'GroupNotExits'
+    | 'ImageFormat'
+    | 'FileSizeToLarge'
 export interface IErrorResponse {
     statusCode: number;
     code: string;
@@ -145,6 +149,26 @@ export const ERROR_RESPONSE: Record<TErrorCode, IErrorResponse> = {
         statusCode: HttpStatus.BAD_REQUEST,
         code: 'USER_NOT_FOUND',
         message: 'Not found user: ',
+    },
+    ImageIsRequired: {
+        statusCode: HttpStatus.BAD_REQUEST,
+        code: 'A0005',
+        message: 'Image is required',
+    },
+    GroupNotExits: {
+        statusCode: HttpStatus.BAD_REQUEST,
+        code: 'USER_NOT_FOUND',
+        message: 'Not found group: ',
+    },
+    ImageFormat: {
+        statusCode: HttpStatus.BAD_REQUEST,
+        code: 'USER_NOT_FOUND',
+        message: 'Only PNG, JPG, and JPEG files are allowed ',
+    },
+    FileSizeToLarge: {
+        statusCode: HttpStatus.BAD_REQUEST,
+        code: 'USER_NOT_FOUND',
+        message: 'File size is to large',
     },
 }
 

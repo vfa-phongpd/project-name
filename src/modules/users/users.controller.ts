@@ -49,44 +49,7 @@ export class UsersController {
       },
     },
   })
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        name: {
-          type: 'string',
-          example: "Phong",
-          description: 'name users'
-        },
-        email: {
-          type: 'string',
-          example: 'Member1@gmail.com',
-          description: "email users"
-        },
-        password: {
-          type: 'string',
-          example: 'Phong@123',
-          description: "Password users"
-        },
-        gender: {
-          type: 'int',
-          example: 1,
-          description: "0 is male, 1 is female "
-        },
-        birthday: {
-          type: 'date',
-          example: "2001-07-30",
-          description: "yyyy/MM/DD"
-        },
-        role_id: {
-          type: 'int',
-          example: 2,
-          description: '1 is admin, 2 is group admin, 3 is member'
-        }
-      }
-    }
-  })
-  async create(@Body() createUserDto: CreateUserDto, @Req() request) {
+  async createUser(@Body() createUserDto: CreateUserDto, @Req() request) {
     try {
       await this.usersService.createUser(createUserDto, request.user.id);
       return new CustomResponse(SUCCESS_RESPONSE.AdminCreateSuccess)

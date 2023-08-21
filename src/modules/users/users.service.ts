@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from '../../entities/user.entity';
@@ -17,8 +17,8 @@ export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly roleService: RolesService,
-    private readonly permissionService: PermissionsService
-
+    private readonly permissionService: PermissionsService,
+    private dataSource: DataSource
   ) { }
 
   async createUser(createUserDto: CreateUserDto, idUserCreate: number) {
@@ -29,26 +29,38 @@ export class UsersService {
       throw new ErrorCustom(ERROR_RESPONSE.InvalidEmail)
     }
 
+    const queryRunner = this.dataSource.createQueryRunner();
+
     const checkPassword = await this.checkPassord(createUserDto.password)
 
-    const role = await this.roleService.findOne(createUserDto.role_id)
-    if (idUserCreate !== ROLE.ADMIN) {
-      if (createUserDto.role_id === ROLE.ADMIN || createUserDto.role_id === ROLE.GROUP_ADMIN) {
-        throw new ErrorCustom(ERROR_RESPONSE.Unauthorized)
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const role = await this.roleService.findOne(createUserDto.role_id)
+      if (idUserCreate !== ROLE.ADMIN) {
+        if (createUserDto.role_id === ROLE.ADMIN || createUserDto.role_id === ROLE.GROUP_ADMIN) {
+          throw new ErrorCustom(ERROR_RESPONSE.Unauthorized)
+        }
       }
-    }
 
-    const data = await this.userRepository.create({
-      name: createUserDto.name,
-      email: createUserDto.email,
-      password: checkPassword,
-      gender: createUserDto.gender,
-      birthday: createUserDto.birthday,
-      created_at: new Date(),
-      created_by: idUserCreate,
-      role_id: role
-    })
-    return await this.userRepository.save(data)
+      const dataCreateUsers = await this.userRepository.create({
+        name: createUserDto.name,
+        email: createUserDto.email,
+        password: checkPassword,
+        gender: createUserDto.gender,
+        birthday: createUserDto.birthday,
+        created_at: new Date(),
+        created_by: idUserCreate,
+        role_id: role
+      })
+      await queryRunner.manager.save(User, dataCreateUsers);
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw new ErrorCustom(ERROR_RESPONSE.InsertDataFailed)
+    } finally {
+      await queryRunner.release();
+    }
   }
 
 
@@ -62,7 +74,10 @@ export class UsersService {
       const infoUser = await this.userRepository.findOne({ where: { email } })
       return infoUser
     } catch (error) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> create-voucher
     }
   }
 
@@ -72,7 +87,4 @@ export class UsersService {
     }
     return await bcrypt.hash(PASSWORD.PASSWORD_DEFAULT, 10)
   }
-
-
-
 }
