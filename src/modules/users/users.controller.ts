@@ -8,6 +8,8 @@ import { SUCCESS_RESPONSE } from '../../common/custom-exceptions';
 import { PermissionGuard } from 'src/third-parties/guard/permission.guard';
 import { Permissions } from 'src/third-parties/decorators/permission.decorator';
 import { PERMISSION } from 'src/common/enum/permission.enum';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UserUsedVouchersDTO } from './dto/userUsedVoucher.dto';
 
 @ApiTags('users')
 @Controller('api/users')
@@ -60,11 +62,10 @@ export class UsersController {
 
 
 
-  @Get('get:userId')
-  get(@Param('userId') userId: number) {
-    console.log(userId);
-
-    return this.usersService.getUserVouchers(userId)
+  @Post('used')
+  async userUsedVouchers(@Body() userUsedVouchersDTO: UserUsedVouchersDTO) {
+    await this.usersService.userUseVouchers(userUsedVouchersDTO.User_id, userUsedVouchersDTO.Voucher_id)
+    return new CustomResponse(SUCCESS_RESPONSE.AdminCreateSuccess)
   }
 
 }

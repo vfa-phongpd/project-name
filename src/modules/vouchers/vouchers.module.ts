@@ -13,5 +13,6 @@ import { S3Service } from './s3.service';
     GroupsModule],
   controllers: [VouchersController],
   providers: [VouchersService, S3Service],
+  exports: [VouchersService]
 })
 export class VouchersModule { }

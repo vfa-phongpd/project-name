@@ -69,7 +69,7 @@ export class User {
     updated_at: Date;
 
 
-    @OneToMany(() => UsersUsedVoucher, UsersUsedVoucher => UsersUsedVoucher.user_id)
+    @OneToMany(() => UsersUsedVoucher, UsersUsedVoucher => UsersUsedVoucher.user)
     users_used_vouchers: UsersUsedVoucher[]
 }
 
