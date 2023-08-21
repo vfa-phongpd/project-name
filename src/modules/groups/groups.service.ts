@@ -70,7 +70,7 @@ export class GroupsService {
       const findAllGroup = await this.groupRepository.find()
       return findAllGroup
     } catch (error) {
-      throw new Error(error)
+
     }
 
   }
