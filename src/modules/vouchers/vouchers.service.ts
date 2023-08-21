@@ -5,9 +5,9 @@ import { ErrorCustom } from 'src/common/error-custom';
 import { Group } from 'src/entities/group.entity';
 import { GroupsVouchers } from 'src/entities/groups_vouchers.entity';
 import { Voucher } from 'src/entities/voucher.entity';
-import { DataSource, In, Repository } from 'typeorm';
+import { DataSource, In, LessThan, Repository } from 'typeorm';
 import { CreateVoucherDto } from './dto/create-voucher.dto';
-
+import * as nodemailer from 'nodemailer';
 @Injectable()
 export class VouchersService {
 
@@ -78,5 +78,53 @@ export class VouchersService {
     if (checkExits.length > 0) {
       throw new ErrorCustom(ERROR_RESPONSE.GroupNotExits, checkExits.join(', '))
     }
+  }
+
+
+  async sendMailExpiredVouchers() {
+
+    const getDateVouchers = await this.voucherRepository.find({
+      relations: [
+        'groups_vouchers'
+      ]
+    })
+    return getDateVouchers
+
+
+
+
+
+
+
+    // const currentDate = new Date(); // Ngày hiện tại
+    // const oneDay = 24 * 60 * 60 * 1000; // Một ngày trong millisecond
+    // const oneDayBefore = new Date(currentDate.getTime() - oneDay); // Ngày trước 1 ngày
+    // const getDateVouchers = await this.voucherRepository.find({
+    //   where: {
+    //     expired_date: LessThan(oneDayBefore),
+    //   },
+    //   select: ['expired_date', 'voucher_id'], // Chọn chỉ cần expired_date
+    // });
+    // console.log(getDateVouchers);
+
+
+    //   const transporter = nodemailer.createTransport({
+    //     service: 'Gmail',
+    //     auth: {
+    //       user: process.env.AUTH_EmailSend,
+    //       pass: process.env.AUTH_Pass,
+    //     },
+    //   });
+
+    //   for (const voucher of expiringVouchers) {
+    //     const mailOptions = {
+    //       from: process.env.AUTH_EmailSend,
+    //       to: sendToEmail,
+    //       subject: 'Your Voucher is Expiring Soon',
+    //       text: `Hello,\n\nYour voucher "${voucher.name}" is expiring on ${voucher.expired_date.toDateString()}. Don't miss out!\n\nBest regards,\nThe Voucher Team`,
+    //     };
+
+    //     await transporter.sendMail(mailOptions);
+    //   }
   }
 }
