@@ -7,9 +7,10 @@ import { JwtService } from '@nestjs/jwt';
 import { RolesModule } from '../roles/roles.module';
 import { Role } from 'src/entities/role.entity';
 import { PermissionsModule } from '../permissions/permissions.module';
+import { Group } from 'src/entities/group.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), RolesModule, PermissionsModule],
+  imports: [TypeOrmModule.forFeature([User, Group]), RolesModule, PermissionsModule],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [TypeOrmModule, UsersService]

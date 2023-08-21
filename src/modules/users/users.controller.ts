@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Req, Param, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -60,9 +60,11 @@ export class UsersController {
 
 
 
-  @Get('get')
-  get() {
-    return this.usersService.getUsersWithVouchers()
+  @Get('get:userId')
+  get(@Param('userId') userId: number) {
+    console.log(userId);
+
+    return this.usersService.getUserVouchers(userId)
   }
 
 }

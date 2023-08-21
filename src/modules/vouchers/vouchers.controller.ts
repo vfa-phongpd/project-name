@@ -117,8 +117,5 @@ export class VouchersController {
   }
 
 
-  @Get('get')
-  get(@Body() voucher_id: number) {
-    return this.vouchersService.getUsersHaveVouchers(voucher_id)
-  }
+
 }

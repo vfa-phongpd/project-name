@@ -23,11 +23,8 @@ import { Permission } from './entities/permission.entity';
 import { Group } from './entities/group.entity';
 import { VouchersModule } from './modules/vouchers/vouchers.module';
 import { GroupsVouchersModule } from './modules/groups_vouchers/groups_vouchers.module';
-<<<<<<< HEAD
-import { UsersUsedVouchersModule } from './modules/users_used_vouchers/users_used_vouchers.module';
-=======
 import { S3Service } from './modules/vouchers/s3.service';
->>>>>>> create-voucher
+import { UsersUsedVouchersModule } from './modules/users_used_vouchers/users_used_vouchers.module';
 
 @Module({
   imports: [

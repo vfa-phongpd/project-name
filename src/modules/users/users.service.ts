@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from '../../entities/user.entity';
@@ -11,11 +11,15 @@ import { RolesService } from '../roles/roles.service';
 import { PermissionsService } from '../permissions/permissions.service';
 import { PASSWORD } from 'src/common/enum/password.enum.';
 import { ROLE } from 'src/common/enum/role.enum';
+import { Group } from 'src/entities/group.entity';
+import { Voucher } from 'src/entities/voucher.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(Group) private readonly groupRepository: Repository<Group>,
+
     private readonly roleService: RolesService,
     private readonly permissionService: PermissionsService,
     private dataSource: DataSource
@@ -83,7 +87,6 @@ export class UsersService {
     }
     return await bcrypt.hash(PASSWORD.PASSWORD_DEFAULT, 10)
   }
-<<<<<<< HEAD
 
 
   async getUsersWithVouchers(): Promise<User[]> {
@@ -94,8 +97,18 @@ export class UsersService {
       .getMany();
   }
 
+  async getUserVouchers(userId: number) {
+    const user = await this.userRepository.find({
+      where: {
+        id: userId
+      },
+      relations: [
+        'group_id',
+        // 'group_id.groups_vouchers',
+        // 'group_vouchers.voucher_id'
+      ],
+    });
+    return user
+  }
 
-
-=======
->>>>>>> create-voucher
 }
