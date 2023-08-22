@@ -4,44 +4,44 @@ export class InsertData1691982691847 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         // Insert roles
-        await queryRunner.query(`INSERT INTO roles \`(role_name) VALUES ('admin')`);
-        await queryRunner.query(`INSERT INTO roles \`(role_name) VALUES ('group admin')`);
-        await queryRunner.query(`INSERT INTO roles \`(role_name) VALUES ('member')`);
+        await queryRunner.query(`INSERT INTO roles (role_name) VALUES ('admin')`);
+        await queryRunner.query(`INSERT INTO roles (role_name) VALUES ('group admin')`);
+        await queryRunner.query(`INSERT INTO roles (role_name) VALUES ('member')`);
 
         // Insert permissions
-        await queryRunner.query(`INSERT INTO permissions \`(permission_name) VALUES ('create_member')`);
-        await queryRunner.query(`INSERT INTO permissions \`(permission_name) VALUES ('update_member')`);
-        await queryRunner.query(`INSERT INTO permissions \`(permission_name) VALUES ('delete_member')`);
-        await queryRunner.query(`INSERT INTO permissions \`(permission_name) VALUES ('view_member')`);
-        await queryRunner.query(`INSERT INTO permissions \`(permission_name) VALUES ('assign_member_to_group')`);
-        await queryRunner.query(`INSERT INTO permissions \`(permission_name) VALUES ('create_group')`);
-        await queryRunner.query(`INSERT INTO permissions \`(permission_name) VALUES ('update_group')`);
-        await queryRunner.query(`INSERT INTO permissions \`(permission_name) VALUES ('delete_group')`);
-        await queryRunner.query(`INSERT INTO permissions \`(permission_name) VALUES ('view_group')`);
+        await queryRunner.query(`INSERT INTO permissions (permission_name) VALUES ('create_member')`);
+        await queryRunner.query(`INSERT INTO permissions (permission_name) VALUES ('update_member')`);
+        await queryRunner.query(`INSERT INTO permissions (permission_name) VALUES ('delete_member')`);
+        await queryRunner.query(`INSERT INTO permissions (permission_name) VALUES ('view_member')`);
+        await queryRunner.query(`INSERT INTO permissions (permission_name) VALUES ('assign_member_to_group')`);
+        await queryRunner.query(`INSERT INTO permissions (permission_name) VALUES ('create_group')`);
+        await queryRunner.query(`INSERT INTO permissions (permission_name) VALUES ('update_group')`);
+        await queryRunner.query(`INSERT INTO permissions (permission_name) VALUES ('delete_group')`);
+        await queryRunner.query(`INSERT INTO permissions (permission_name) VALUES ('view_group')`);
 
 
         // Insert role_permission pairs
-        await queryRunner.query(`INSERT INTO roles_permissions \`(role_id, permission_id) VALUES (1, 1)`);
-        await queryRunner.query(`INSERT INTO roles_permissions \`(role_id, permission_id) VALUES (1, 2)`);
-        await queryRunner.query(`INSERT INTO roles_permissions \`(role_id, permission_id) VALUES (1, 3)`);
-        await queryRunner.query(`INSERT INTO roles_permissions \`(role_id, permission_id) VALUES (1, 4)`);
-        await queryRunner.query(`INSERT INTO roles_permissions \`(role_id, permission_id) VALUES (1, 5)`);
-        await queryRunner.query(`INSERT INTO roles_permissions \`(role_id, permission_id) VALUES (1, 6)`);
-        await queryRunner.query(`INSERT INTO roles_permissions \`(role_id, permission_id) VALUES (1, 7)`);
-        await queryRunner.query(`INSERT INTO roles_permissions \`(role_id, permission_id) VALUES (1, 8)`);
-        await queryRunner.query(`INSERT INTO roles_permissions \`(role_id, permission_id) VALUES (1, 9)`);
-        await queryRunner.query(`INSERT INTO roles_permissions \`(role_id, permission_id) VALUES (2, 1)`);
-        await queryRunner.query(`INSERT INTO roles_permissions \`(role_id, permission_id) VALUES (2, 2)`);
-        await queryRunner.query(`INSERT INTO roles_permissions \`(role_id, permission_id) VALUES (2, 3)`);
-        await queryRunner.query(`INSERT INTO roles_permissions \`(role_id, permission_id) VALUES (2, 4)`);
-        await queryRunner.query(`INSERT INTO roles_permissions \`(role_id, permission_id) VALUES (2, 5)`);
+        await queryRunner.query(`INSERT INTO roles_permissions (role_id, permission_id) VALUES (1, 1)`);
+        await queryRunner.query(`INSERT INTO roles_permissions (role_id, permission_id) VALUES (1, 2)`);
+        await queryRunner.query(`INSERT INTO roles_permissions (role_id, permission_id) VALUES (1, 3)`);
+        await queryRunner.query(`INSERT INTO roles_permissions (role_id, permission_id) VALUES (1, 4)`);
+        await queryRunner.query(`INSERT INTO roles_permissions (role_id, permission_id) VALUES (1, 5)`);
+        await queryRunner.query(`INSERT INTO roles_permissions (role_id, permission_id) VALUES (1, 6)`);
+        await queryRunner.query(`INSERT INTO roles_permissions (role_id, permission_id) VALUES (1, 7)`);
+        await queryRunner.query(`INSERT INTO roles_permissions (role_id, permission_id) VALUES (1, 8)`);
+        await queryRunner.query(`INSERT INTO roles_permissions (role_id, permission_id) VALUES (1, 9)`);
+        await queryRunner.query(`INSERT INTO roles_permissions (role_id, permission_id) VALUES (2, 1)`);
+        await queryRunner.query(`INSERT INTO roles_permissions (role_id, permission_id) VALUES (2, 2)`);
+        await queryRunner.query(`INSERT INTO roles_permissions (role_id, permission_id) VALUES (2, 3)`);
+        await queryRunner.query(`INSERT INTO roles_permissions (role_id, permission_id) VALUES (2, 4)`);
+        await queryRunner.query(`INSERT INTO roles_permissions (role_id, permission_id) VALUES (2, 5)`);
 
 
         //Inser User
         await queryRunner.query(`
                     INSERT INTO users (
-                        \`user_id, \`name, \`email, \`password, \`gender, \`birthday, \`last_login,
-                        \`created_at, \`created_by, \`updated_by, \`deleted_at, \`updated_at, \`group_id, \`role_id
+                        user_id, name, email, password, gender, birthday, last_login,
+                        created_at, created_by, updated_by, deleted_at, updated_at, group_id, role_id
                     ) VALUES (
                         '1', 'Admin', 'Admin@gmail.com', '$2b$10$9xMrfyGz6euLjOhpSov5yOr0kifPKXQTobLbaYlzxAzkP8dFBpAlq', '1', '2001-08-29', '2023-08-10 21:35:23.000000', '2023-08-10 21:23:07.000000', '1', NULL, NULL, NULL, NULL, '1'
                     )

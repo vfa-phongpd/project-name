@@ -3,10 +3,6 @@ import { MigrationInterface, QueryRunner, TableForeignKey } from "typeorm"
 export class CreateRelationship1691675290830 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-
-
-
-
         await queryRunner.createForeignKey(
             "users",
             new TableForeignKey({
@@ -16,8 +12,6 @@ export class CreateRelationship1691675290830 implements MigrationInterface {
                 onDelete: "CASCADE",
             }),
         )
-
-
         await queryRunner.createForeignKey(
             "users",
             new TableForeignKey({
@@ -30,8 +24,6 @@ export class CreateRelationship1691675290830 implements MigrationInterface {
 
 
     }
-
-
     public async down(queryRunner: QueryRunner): Promise<void> {
         // Drop foreign key for group_id in users table
         await queryRunner.dropForeignKey("users", "FK_users_group_id");
