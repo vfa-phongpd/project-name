@@ -103,13 +103,16 @@ export class VouchersService {
       return []; // Return empty array if no vouchers are about to expire
     }
 
+    //console.log(VoucherIdAboutToExpired);
+
+
     const queryBuilder = this.voucherRepository
       .createQueryBuilder('v')
       .leftJoin('v.groups_vouchers', 'gv')
       .leftJoin('gv.group', 'g')
       .leftJoin('g.user', 'u')
       .where('gv.voucher_id IN (:voucherId)', { voucherId: VoucherIdAboutToExpired })
-      .select(['gv.voucher_id', 'v.expired_date', 'g.group_id', 'u.id', 'u.email', 'u.name']);
+      .select(['gv.voucher_id', 'v.expired_date', 'g.group_id', 'u.user_id', 'u.email', 'u.name']);
 
     const voucherInfoAndUsers = await queryBuilder.getRawMany();
     // //voucher used
@@ -117,16 +120,13 @@ export class VouchersService {
       where: {
         voucher_id: In(VoucherIdAboutToExpired),
       }
-    })).map(data => ({ user_id: data.id, voucher_id: data.voucher_id }))
+    })).map(data => ({ user_id: data.user_id, voucher_id: data.voucher_id }))
 
 
     const userNeededToSendEmail = voucherInfoAndUsers.filter(data =>
-      !getAllVoucherUsed.map(data2 => data2.user_id + data2.voucher_id).includes(data.u_id + data.gv_voucher_id)
+      !getAllVoucherUsed.map(dataUsed => dataUsed.user_id + dataUsed.voucher_id).includes(data.u_user_id + data.gv_voucher_id)
     );
-
     return userNeededToSendEmail;
-
-
   }
 
   async send_mail(emailNeededSenmail: any) {
