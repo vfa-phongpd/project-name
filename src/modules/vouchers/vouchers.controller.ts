@@ -13,13 +13,8 @@ import { config } from "../../config";
 import { S3 } from "aws-sdk";
 import { S3Service } from './s3.service';
 import { multerOptionsCreateVouchers, multerOptionsUploadVouchers } from 'src/third-parties/interceptors/create-voucher.interceptor';
-<<<<<<< HEAD
-import { Cron, CronExpression } from '@nestjs/schedule';
-
-=======
 import * as nodemailer from 'nodemailer'
 import { Cron, CronExpression } from '@nestjs/schedule';
->>>>>>> user_used_voucher
 type FileNameCallback = (error: Error | null, filename: string) => void
 
 @ApiTags('vouchers')
@@ -27,7 +22,8 @@ type FileNameCallback = (error: Error | null, filename: string) => void
 @ApiBearerAuth()
 export class VouchersController {
   constructor(private readonly vouchersService: VouchersService,
-    private readonly s3Service: S3Service
+    private readonly s3Service: S3Service,
+
   ) { }
 
   @Post('create')
@@ -122,21 +118,12 @@ export class VouchersController {
     }
   }
 
-<<<<<<< HEAD
-  @Get('send-mail')
-  //@Cron(CronExpression.EVERY_DAY_AT_8AM)
-  async sendMailExpiredVouchers() {
-    return await this.vouchersService.sendMailExpiredVouchers()
-
-  }
-=======
-
-  @Cron(CronExpression.EVERY_DAY_AT_8AM)
   @Post('send-mail')
+  @Cron('0 1 * * * *')// Vào 8AM GMT+7 (1H UTC)
   async sendMailExpiredVouchers() {
-    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
-    const currentDate = new Date();
+    const emailNeededSenmail = await this.vouchersService.sendMailExpiredVouchers()
+    await this.vouchersService.send_mail(emailNeededSenmail)
+    return new CustomResponse(SUCCESS_RESPONSE.ResponseSuccess)
   }
 
->>>>>>> user_used_voucher
 }

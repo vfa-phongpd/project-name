@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ERROR_RESPONSE } from 'src/common/custom-exceptions';
+import { ERROR_RESPONSE, SUCCESS_RESPONSE } from 'src/common/custom-exceptions';
 import { ErrorCustom } from 'src/common/error-custom';
 import { Group } from 'src/entities/group.entity';
 import { GroupsVouchers } from 'src/entities/groups_vouchers.entity';
 import { Voucher } from 'src/entities/voucher.entity';
-import { DataSource, In, LessThan, Repository } from 'typeorm';
+import { Between, DataSource, In, LessThan, LessThanOrEqual, MoreThan, Repository } from 'typeorm';
 import { CreateVoucherDto } from './dto/create-voucher.dto';
 import * as nodemailer from 'nodemailer';
+import { CustomResponse } from 'src/common/response_success';
+import { UsersUsedVoucher } from 'src/entities/users_used_voucher.entity';
 @Injectable()
 export class VouchersService {
 
@@ -15,6 +17,8 @@ export class VouchersService {
     @InjectRepository(Voucher) private readonly voucherRepository: Repository<Voucher>,
     @InjectRepository(Group) private readonly groupRepository: Repository<Group>,
     @InjectRepository(GroupsVouchers) private readonly groupsVouchersRepository: Repository<GroupsVouchers>,
+    @InjectRepository(UsersUsedVoucher) private readonly usersUsedVoucherRepository: Repository<UsersUsedVoucher>,
+
     private dataSource: DataSource
   ) { }
 
@@ -83,48 +87,67 @@ export class VouchersService {
 
   async sendMailExpiredVouchers() {
 
-    const getDateVouchers = await this.voucherRepository.find({
-      relations: [
-        'groups_vouchers'
-      ]
-    })
-    return getDateVouchers
+    const currentDate = new Date();
+    const nextDay = new Date();
+    nextDay.setDate(currentDate.getDate() + 1);
+
+    // get all expired_date and voucher_id
+    const VoucherIdAboutToExpired = (await this.voucherRepository.find({
+      where: {
+        expired_date: Between(currentDate, nextDay)
+      },
+      select: ['expired_date', 'voucher_id'],
+    })).map(data => data.voucher_id);
+
+    if (VoucherIdAboutToExpired.length === 0) {
+      return []; // Return empty array if no vouchers are about to expire
+    }
+
+    const queryBuilder = this.voucherRepository
+      .createQueryBuilder('v')
+      .leftJoin('v.groups_vouchers', 'gv')
+      .leftJoin('gv.group', 'g')
+      .leftJoin('g.user', 'u')
+      .where('gv.voucher_id IN (:voucherId)', { voucherId: VoucherIdAboutToExpired })
+      .select(['gv.voucher_id', 'v.expired_date', 'g.group_id', 'u.id', 'u.email', 'u.name']);
+
+    const voucherInfoAndUsers = await queryBuilder.getRawMany();
+    // //voucher used
+    const getAllVoucherUsed = (await this.usersUsedVoucherRepository.find({
+      where: {
+        voucher_id: In(VoucherIdAboutToExpired),
+      }
+    })).map(data => ({ user_id: data.id, voucher_id: data.voucher_id }))
 
 
+    const userNeededToSendEmail = voucherInfoAndUsers.filter(data =>
+      !getAllVoucherUsed.map(data2 => data2.user_id + data2.voucher_id).includes(data.u_id + data.gv_voucher_id)
+    );
+
+    return userNeededToSendEmail;
 
 
+  }
+
+  async send_mail(emailNeededSenmail: any) {
+
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: process.env.AUTH_EmailSend,
+        pass: process.env.AUTH_Pass,
+      },
+    });
 
 
-
-    // const currentDate = new Date(); // Ngày hiện tại
-    // const oneDay = 24 * 60 * 60 * 1000; // Một ngày trong millisecond
-    // const oneDayBefore = new Date(currentDate.getTime() - oneDay); // Ngày trước 1 ngày
-    // const getDateVouchers = await this.voucherRepository.find({
-    //   where: {
-    //     expired_date: LessThan(oneDayBefore),
-    //   },
-    //   select: ['expired_date', 'voucher_id'], // Chọn chỉ cần expired_date
-    // });
-    // console.log(getDateVouchers);
-
-
-    //   const transporter = nodemailer.createTransport({
-    //     service: 'Gmail',
-    //     auth: {
-    //       user: process.env.AUTH_EmailSend,
-    //       pass: process.env.AUTH_Pass,
-    //     },
-    //   });
-
-    //   for (const voucher of expiringVouchers) {
-    //     const mailOptions = {
-    //       from: process.env.AUTH_EmailSend,
-    //       to: sendToEmail,
-    //       subject: 'Your Voucher is Expiring Soon',
-    //       text: `Hello,\n\nYour voucher "${voucher.name}" is expiring on ${voucher.expired_date.toDateString()}. Don't miss out!\n\nBest regards,\nThe Voucher Team`,
-    //     };
-
-    //     await transporter.sendMail(mailOptions);
-    //   }
+    for (const voucher of emailNeededSenmail) {
+      const mailOptions = {
+        from: process.env.AUTH_EmailSend,
+        to: voucher.u_email,
+        subject: 'Your Voucher is Expiring Soon',
+        text: `Hello,\n\nYour voucher "${voucher.u_name}" is expiring on ${voucher.v_expired_date.toDateString()}. Don't miss out!\n\nBest regards,\nThe Voucher Team`,
+      };
+      await transporter.sendMail(mailOptions);
+    }
   }
 }
