@@ -21,8 +21,6 @@ import { GroupsVouchers } from 'src/entities/groups_vouchers.entity';
     RolesModule,
     PermissionsModule,
     UsersUsedVouchersModule,
-    //GroupsModule,
-    //VouchersModule
   ],
   controllers: [UsersController],
   providers: [UsersService],
