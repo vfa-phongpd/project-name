@@ -94,38 +94,33 @@ export class UsersService {
   async userUseVouchers(userId: number, voucherId: number) {
     const findUsers = await this.userRepository.findOneBy({ user_id: userId })
     const findVouchers = await this.voucherRepository.findOneBy({ voucher_id: voucherId })
-    console.log(findUsers, findVouchers);
-
     if (!findUsers) {
-      if (!findVouchers) {
-        throw new ErrorCustom(ERROR_RESPONSE.VoucherNotFound)
-      }
+      throw new ErrorCustom(ERROR_RESPONSE.UserNotExits)
     }
-    // else {
-    //   throw new ErrorCustom(ERROR_RESPONSE.UserNotExits)
-    // }
-    // await this.getUserVouchers(findUsers.user_id, findVouchers.voucher_id)
-    const a = await this.CheckUsedVouchers(findUsers.user_id, findVouchers.voucher_id)
+    if (!findVouchers) {
+      throw new ErrorCustom(ERROR_RESPONSE.VoucherNotFound)
+    }
+
+    await this.getUserVouchers(userId, voucherId)
+    await this.CheckUsedVouchers(userId, voucherId)
     const queryRunner = this.dataSource.createQueryRunner();
 
-    console.log(a);
-
-    // await queryRunner.connect();
-    // await queryRunner.startTransaction();
-    // try {
-    //   let createUserUsedVouchers = await this.UserUsedVoucherRepository.create({
-    //     id: userId,
-    //     voucher_id: voucherId,
-    //     created_at: new Date()
-    //   })
-    //   await queryRunner.manager.save(UsersUsedVoucher, createUserUsedVouchers);
-    //   await queryRunner.commitTransaction();
-    // } catch (error) {
-    //   await queryRunner.rollbackTransaction();
-    //   throw new ErrorCustom(ERROR_RESPONSE.InsertDataFailed)
-    // } finally {
-    //   await queryRunner.release();
-    // }
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      let createUserUsedVouchers = await this.UserUsedVoucherRepository.create({
+        user_id: userId,
+        voucher_id: voucherId,
+        created_at: new Date()
+      })
+      await queryRunner.manager.save(UsersUsedVoucher, createUserUsedVouchers);
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw new ErrorCustom(ERROR_RESPONSE.InsertDataFailed)
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async getUserVouchers(userId: number, voucherId: number) {
@@ -139,6 +134,9 @@ export class UsersService {
 
       ],
     });
+    if (!userHaveVouchers) {
+      throw new ErrorCustom(ERROR_RESPONSE.UserNotHaveVoucher)
+    }
     const findVoucherOfUser = userHaveVouchers.some(data => data.group_id.groups_vouchers.some(dataVoucher => dataVoucher.voucher_id === voucherId))
     if (!findVoucherOfUser) {
       throw new ErrorCustom(ERROR_RESPONSE.UserNotHaveVoucher)
@@ -148,7 +146,7 @@ export class UsersService {
 
   async CheckUsedVouchers(userId: number, voucherId: number) {
     const findAllVouchersUsed = await this.UserUsedVoucherRepository.find()
-    const check = findAllVouchersUsed.some(data => data.id === userId && data.voucher_id === voucherId)
+    const check = findAllVouchersUsed.some(data => data.user_id === userId && data.voucher_id === voucherId)
     if (check === true) {
       throw new ErrorCustom(ERROR_RESPONSE.VoucherUsed)
     }

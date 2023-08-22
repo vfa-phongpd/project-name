@@ -8,7 +8,7 @@ export class CreateTableUsersUsedVouchers1692348789483 implements MigrationInter
                 name: "users_used_vouchers",
                 columns: [
                     {
-                        name: "id",
+                        name: "user_id",
                         type: "int",
                         isNullable: false,
                         isPrimary: true,
@@ -28,8 +28,8 @@ export class CreateTableUsersUsedVouchers1692348789483 implements MigrationInter
                 ],
                 foreignKeys: [
                     {
-                        columnNames: ["id"],
-                        referencedColumnNames: ["id"],
+                        columnNames: ["user_id"],
+                        referencedColumnNames: ["user_id"],
                         referencedTableName: "users",
                         onDelete: "CASCADE",
                     },
