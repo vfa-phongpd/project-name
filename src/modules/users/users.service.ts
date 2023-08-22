@@ -92,18 +92,46 @@ export class UsersService {
   }
 
   async userUseVouchers(userId: number, voucherId: number) {
+    const findUsers = await this.userRepository.findOneBy({ user_id: userId })
+    const findVouchers = await this.voucherRepository.findOneBy({ voucher_id: voucherId })
+    console.log(findUsers, findVouchers);
 
-    await this.getUserVouchers(userId, voucherId)
+    if (!findUsers) {
+      if (!findVouchers) {
+        throw new ErrorCustom(ERROR_RESPONSE.VoucherNotFound)
+      }
+    }
+    // else {
+    //   throw new ErrorCustom(ERROR_RESPONSE.UserNotExits)
+    // }
+    // await this.getUserVouchers(findUsers.user_id, findVouchers.voucher_id)
+    const a = await this.CheckUsedVouchers(findUsers.user_id, findVouchers.voucher_id)
+    const queryRunner = this.dataSource.createQueryRunner();
 
-    const checkAndCreateUsedVouchers = await this.CheckAndCreateUsedVouchers(userId, voucherId)
-    return checkAndCreateUsedVouchers
+    console.log(a);
 
+    // await queryRunner.connect();
+    // await queryRunner.startTransaction();
+    // try {
+    //   let createUserUsedVouchers = await this.UserUsedVoucherRepository.create({
+    //     id: userId,
+    //     voucher_id: voucherId,
+    //     created_at: new Date()
+    //   })
+    //   await queryRunner.manager.save(UsersUsedVoucher, createUserUsedVouchers);
+    //   await queryRunner.commitTransaction();
+    // } catch (error) {
+    //   await queryRunner.rollbackTransaction();
+    //   throw new ErrorCustom(ERROR_RESPONSE.InsertDataFailed)
+    // } finally {
+    //   await queryRunner.release();
+    // }
   }
 
   async getUserVouchers(userId: number, voucherId: number) {
     const userHaveVouchers = await this.userRepository.find({
       where: {
-        id: userId
+        user_id: userId
       },
       relations: [
         'group_id',
@@ -118,33 +146,11 @@ export class UsersService {
     return userHaveVouchers
   }
 
-  async CheckAndCreateUsedVouchers(userId: number, voucherId: number) {
-    const findUsers = await this.userRepository.findOneBy({ id: userId })
-    const findVouchers = await this.voucherRepository.findOneBy({ voucher_id: voucherId })
-    if (findUsers) {
-      if (findVouchers) {
-        const findAllVouchersUsed = await this.UserUsedVoucherRepository.find()
-        const check = findAllVouchersUsed.some(data => data.id === findUsers.id && data.voucher_id === findVouchers.voucher_id)
-
-        if (check === true) {
-          throw new ErrorCustom(ERROR_RESPONSE.VoucherUsed)
-        }
-        else {
-          const createUserUsedVouchers = await this.UserUsedVoucherRepository.create({
-            id: findUsers.id,
-            voucher_id: findVouchers.voucher_id,
-            created_at: new Date()
-          })
-          await this.UserUsedVoucherRepository.save(createUserUsedVouchers)
-          return createUserUsedVouchers
-        }
-      }
-      else {
-        throw new ErrorCustom(ERROR_RESPONSE.VoucherNotFound)
-      }
-    }
-    else {
-      throw new ErrorCustom(ERROR_RESPONSE.UserNotExits)
+  async CheckUsedVouchers(userId: number, voucherId: number) {
+    const findAllVouchersUsed = await this.UserUsedVoucherRepository.find()
+    const check = findAllVouchersUsed.some(data => data.id === userId && data.voucher_id === voucherId)
+    if (check === true) {
+      throw new ErrorCustom(ERROR_RESPONSE.VoucherUsed)
     }
   }
 }

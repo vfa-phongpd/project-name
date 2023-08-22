@@ -174,7 +174,7 @@ export const ERROR_RESPONSE: Record<TErrorCode, IErrorResponse> = {
     UserNotHaveVoucher: {
         statusCode: HttpStatus.BAD_REQUEST,
         code: 'D002',
-        message: 'Voucher not found',
+        message: 'User not have voucher',
     },
 }
 

@@ -14,7 +14,7 @@ import { UsersUsedVoucher } from './users_used_voucher.entity';
 @Entity('users')
 export class User {
     @PrimaryGeneratedColumn()
-    id: number;
+    user_id: number;
 
     @IsNotEmpty({ message: 'Name can not be null or empty' })
     @Column({ type: 'varchar', length: 50, nullable: false, name: 'name' })
