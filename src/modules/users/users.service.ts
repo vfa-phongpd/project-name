@@ -5,7 +5,7 @@ import { DataSource, In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from '../../entities/user.entity';
-import { ERROR_RESPONSE } from '../../common/custom-exceptions';
+import { ERROR_RESPONSE, SUCCESS_RESPONSE } from '../../common/custom-exceptions';
 import { ErrorCustom } from '../../common/error-custom';
 import { RolesService } from '../roles/roles.service';
 import { PermissionsService } from '../permissions/permissions.service';
@@ -14,6 +14,7 @@ import { ROLE } from 'src/common/enum/role.enum';
 import { Group } from 'src/entities/group.entity';
 import { Voucher } from 'src/entities/voucher.entity';
 import { UsersUsedVoucher } from 'src/entities/users_used_voucher.entity';
+import { CustomResponse } from 'src/common/response_success';
 
 @Injectable()
 export class UsersService {
@@ -92,17 +93,13 @@ export class UsersService {
   }
 
   async userUseVouchers(userId: number, voucherId: number) {
-    const findUsers = await this.userRepository.findOneBy({ user_id: userId })
     const findVouchers = await this.voucherRepository.findOneBy({ voucher_id: voucherId })
-    if (!findUsers) {
-      throw new ErrorCustom(ERROR_RESPONSE.UserNotExits)
-    }
     if (!findVouchers) {
       throw new ErrorCustom(ERROR_RESPONSE.VoucherNotFound)
     }
 
-    await this.getUserVouchers(userId, voucherId)
-    await this.CheckUsedVouchers(userId, voucherId)
+    await this.getVouchersUserCanUse(userId, voucherId)
+    await this.checkUsedVouchers(userId, voucherId)
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -123,7 +120,7 @@ export class UsersService {
     }
   }
 
-  async getUserVouchers(userId: number, voucherId: number) {
+  async getVouchersUserCanUse(userId: number, voucherId: number) {
     const userHaveVouchers = await this.userRepository.find({
       where: {
         user_id: userId
@@ -134,21 +131,25 @@ export class UsersService {
 
       ],
     });
-    if (!userHaveVouchers) {
-      throw new ErrorCustom(ERROR_RESPONSE.UserNotHaveVoucher)
-    }
     const findVoucherOfUser = userHaveVouchers.some(data => data.group_id.groups_vouchers.some(dataVoucher => dataVoucher.voucher_id === voucherId))
-    if (!findVoucherOfUser) {
+    if (!userHaveVouchers && !findVoucherOfUser) {
       throw new ErrorCustom(ERROR_RESPONSE.UserNotHaveVoucher)
     }
-    return userHaveVouchers
+    return new CustomResponse(SUCCESS_RESPONSE.ResponseSuccess)
   }
 
-  async CheckUsedVouchers(userId: number, voucherId: number) {
-    const findAllVouchersUsed = await this.UserUsedVoucherRepository.find()
-    const check = findAllVouchersUsed.some(data => data.user_id === userId && data.voucher_id === voucherId)
-    if (check === true) {
+  async checkUsedVouchers(userId: number, voucherId: number) {
+    const findAllVouchersUsed = await this.UserUsedVoucherRepository.find(
+      {
+        where: {
+          user_id: userId,
+          voucher_id: voucherId
+        }
+      }
+    )
+    if (findAllVouchersUsed.length > 0) {
       throw new ErrorCustom(ERROR_RESPONSE.VoucherUsed)
     }
+    return new CustomResponse(SUCCESS_RESPONSE.ResponseSuccess)
   }
 }
