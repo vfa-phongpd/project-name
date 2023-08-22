@@ -61,10 +61,10 @@ export class UsersController {
   }
 
 
-
+  @UseGuards(JwtAuthGuard)
   @Post('used')
-  async userUsedVouchers(@Body() userUsedVouchersDTO: UserUsedVouchersDTO) {
-    await this.usersService.userUseVouchers(userUsedVouchersDTO.User_id, userUsedVouchersDTO.Voucher_id)
+  async userUsedVouchers(@Body() userUsedVouchersDTO: UserUsedVouchersDTO, @Req() request) {
+    await this.usersService.userUseVouchers(request.user.id, userUsedVouchersDTO.Voucher_id)
     return new CustomResponse(SUCCESS_RESPONSE.AdminCreateSuccess)
   }
 
