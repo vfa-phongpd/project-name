@@ -40,7 +40,7 @@ export class InsertData1691982691847 implements MigrationInterface {
         //Inser User
         await queryRunner.query(`
                     INSERT INTO users (
-                        id, name, email, password, gender, birthday, last_login,
+                        user_id, name, email, password, gender, birthday, last_login,
                         created_at, created_by, updated_by, deleted_at, updated_at, group_id, role_id
                     ) VALUES (
                         '1', 'Admin', 'Admin@gmail.com', '$2b$10$9xMrfyGz6euLjOhpSov5yOr0kifPKXQTobLbaYlzxAzkP8dFBpAlq', '1', '2001-08-29', '2023-08-10 21:35:23.000000', '2023-08-10 21:23:07.000000', '1', NULL, NULL, NULL, NULL, '1'

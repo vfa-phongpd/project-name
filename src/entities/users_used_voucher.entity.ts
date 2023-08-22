@@ -8,7 +8,7 @@ import { User } from "./user.entity";
 export class UsersUsedVoucher {
 
     @Column({ primary: true })
-    id: number;
+    user_id: number;
 
     @Column({ primary: true })
     voucher_id
@@ -17,7 +17,7 @@ export class UsersUsedVoucher {
     created_at: Date;
 
     @ManyToOne(() => User, User => User.users_used_vouchers)
-    @JoinColumn({ name: 'id' })
+    @JoinColumn({ name: 'user_id' })
     user: User;
 
 

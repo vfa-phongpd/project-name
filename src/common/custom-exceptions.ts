@@ -30,6 +30,7 @@ type TErrorCode = 'InternalServer' |
     | 'ImageFormat'
     | 'FileSizeToLarge'
     | 'UserNotHaveVoucher'
+    | 'UserNotHaveGroups'
 export interface IErrorResponse {
     statusCode: number;
     code: string;
@@ -174,7 +175,12 @@ export const ERROR_RESPONSE: Record<TErrorCode, IErrorResponse> = {
     UserNotHaveVoucher: {
         statusCode: HttpStatus.BAD_REQUEST,
         code: 'D002',
-        message: 'Voucher not found',
+        message: 'User not have voucher',
+    },
+    UserNotHaveGroups: {
+        statusCode: HttpStatus.BAD_REQUEST,
+        code: 'D002',
+        message: 'User not have group',
     },
 }
 
