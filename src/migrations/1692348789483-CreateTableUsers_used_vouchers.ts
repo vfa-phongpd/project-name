@@ -19,12 +19,6 @@ export class CreateTableUsersUsedVouchers1692348789483 implements MigrationInter
                         isNullable: false,
                         isPrimary: true,
                     },
-                    {
-                        name: "created_at",
-                        type: "DATETIME(6)",
-                        isNullable: false,
-                    },
-
                 ],
                 foreignKeys: [
                     {

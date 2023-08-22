@@ -108,7 +108,6 @@ export class UsersService {
       let createUserUsedVouchers = await this.UserUsedVoucherRepository.create({
         user_id: userId,
         voucher_id: voucherId,
-        created_at: new Date()
       })
       await queryRunner.manager.save(UsersUsedVoucher, createUserUsedVouchers);
       await queryRunner.commitTransaction();

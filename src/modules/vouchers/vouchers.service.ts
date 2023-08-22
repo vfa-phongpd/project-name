@@ -85,7 +85,7 @@ export class VouchersService {
   }
 
 
-  async sendMailExpiredVouchers() {
+  async checkVoucherUserSendMailExpired() {
 
     const currentDate = new Date();
     const nextDay = new Date();
@@ -102,9 +102,6 @@ export class VouchersService {
     if (VoucherIdAboutToExpired.length === 0) {
       return []; // Return empty array if no vouchers are about to expire
     }
-
-    //console.log(VoucherIdAboutToExpired);
-
 
     const queryBuilder = this.voucherRepository
       .createQueryBuilder('v')
@@ -124,13 +121,12 @@ export class VouchersService {
 
 
     const userNeededToSendEmail = voucherInfoAndUsers.filter(data =>
-      !getAllVoucherUsed.map(dataUsed => dataUsed.user_id + dataUsed.voucher_id).includes(data.u_user_id + data.gv_voucher_id)
+      !getAllVoucherUsed.map(dataUsed => dataUsed.user_id + '@' + dataUsed.voucher_id).includes(data.u_user_id + '@' + data.gv_voucher_id)
     );
-    return userNeededToSendEmail;
+    return userNeededToSendEmail
   }
 
   async send_mail(emailNeededSenmail: any) {
-
     const transporter = nodemailer.createTransport({
       service: 'Gmail',
       auth: {
@@ -140,7 +136,7 @@ export class VouchersService {
     });
 
 
-    for (const voucher of emailNeededSenmail) {
+    const emailPromises = emailNeededSenmail.map(async (voucher) => {
       const mailOptions = {
         from: process.env.AUTH_EmailSend,
         to: voucher.u_email,
@@ -148,6 +144,12 @@ export class VouchersService {
         text: `Hello,\n\nYour voucher "${voucher.u_name}" is expiring on ${voucher.v_expired_date.toDateString()}. Don't miss out!\n\nBest regards,\nThe Voucher Team`,
       };
       await transporter.sendMail(mailOptions);
+    });
+    try {
+      await Promise.all(emailPromises);
+      return new CustomResponse(SUCCESS_RESPONSE.ResponseSuccess)
+    } catch (error) {
+      return new ErrorCustom(ERROR_RESPONSE.InternalServer)
     }
   }
 }

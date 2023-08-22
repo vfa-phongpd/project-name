@@ -13,9 +13,6 @@ export class UsersUsedVoucher {
     @Column({ primary: true })
     voucher_id
 
-    @CreateDateColumn({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
-    created_at: Date;
-
     @ManyToOne(() => User, User => User.users_used_vouchers)
     @JoinColumn({ name: 'user_id' })
     user: User;
