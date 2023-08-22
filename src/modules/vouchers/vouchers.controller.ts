@@ -119,7 +119,7 @@ export class VouchersController {
   }
 
   @Post('send-mail')
-  @Cron('20 * * * * *')// Vào 8AM GMT+7 (1H UTC)
+  @Cron('0 8 * * * *')// Vào 8AM GMT+7 (1H UTC)
   async sendMailExpiredVouchers() {
     const emailNeededSenmail = await this.vouchersService.sendMailExpiredVouchers()
     await this.vouchersService.send_mail(emailNeededSenmail)
