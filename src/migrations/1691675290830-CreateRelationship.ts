@@ -21,9 +21,11 @@ export class CreateRelationship1691675290830 implements MigrationInterface {
                 onDelete: "CASCADE",
             }),
         )
-
-
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
     public async down(queryRunner: QueryRunner): Promise<void> {
         // Drop foreign key for group_id in users table
         await queryRunner.dropForeignKey("users", "FK_users_group_id");
