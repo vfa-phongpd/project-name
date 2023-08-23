@@ -29,7 +29,7 @@ import { UsersUsedVouchersService } from './modules/users_used_vouchers/users_us
 import { Voucher } from './entities/voucher.entity';
 import { UsersUsedVoucher } from './entities/users_used_voucher.entity';
 import { GroupsVouchers } from './entities/groups_vouchers.entity';
-
+import { ScheduleModule } from '@nestjs/schedule';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -43,6 +43,7 @@ import { GroupsVouchers } from './entities/groups_vouchers.entity';
       secret: process.env.accessToken,
       signOptions: { expiresIn: '1d' },
     }),
+    ScheduleModule.forRoot(),
     UsersModule, RolesModule, GroupsModule, PermissionsModule, RolePermissionsModule, AuthModule, VouchersModule, GroupsVouchersModule, UsersUsedVouchersModule],
   controllers: [AppController],
   providers: [AppService, UsersService, GroupsService, RolesService, PermissionsService, S3Service, UsersUsedVouchersService],

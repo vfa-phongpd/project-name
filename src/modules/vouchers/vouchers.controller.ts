@@ -22,7 +22,8 @@ type FileNameCallback = (error: Error | null, filename: string) => void
 @ApiBearerAuth()
 export class VouchersController {
   constructor(private readonly vouchersService: VouchersService,
-    private readonly s3Service: S3Service
+    private readonly s3Service: S3Service,
+
   ) { }
 
   @Post('create')
@@ -117,12 +118,14 @@ export class VouchersController {
     }
   }
 
-
-  @Cron(CronExpression.EVERY_DAY_AT_8AM)
   @Post('send-mail')
+  @Cron('0 1 * * * *')//  8AM GMT+7 (1H UTC0)
   async sendMailExpiredVouchers() {
-    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
-    const currentDate = new Date();
+    const emailNeededSenmail = await this.vouchersService.checkVoucherUserSendMailExpired()
+    console.log(emailNeededSenmail);
+
+    //await this.vouchersService.sendMailToUser(emailNeededSenmail)
+    return new CustomResponse(SUCCESS_RESPONSE.ResponseSuccess)
   }
 
 }

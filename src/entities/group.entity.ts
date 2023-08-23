@@ -2,6 +2,7 @@ import { IsNotEmpty } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne, DeleteDateColumn, OneToMany } from 'typeorm';
 
 import { GroupsVouchers } from './groups_vouchers.entity';
+import { User } from './user.entity';
 
 
 @Entity('groups')
@@ -35,5 +36,8 @@ export class Group {
 
     @OneToMany(() => GroupsVouchers, groupsVouchers => groupsVouchers.group)
     groups_vouchers: GroupsVouchers[]
+
+    @OneToOne(() => User, (user) => user.group_id) // specify inverse side as a second parameter
+    user: User
 
 }
