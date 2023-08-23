@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UploadedFile, UseGuards, UseInterceptors, Req, Res } from '@nestjs/common';
+import { Body, Controller, Post, UploadedFile, UseGuards, UseInterceptors, Req, Res, Get } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { ERROR_RESPONSE, SUCCESS_RESPONSE } from 'src/common/custom-exceptions';
@@ -13,7 +13,8 @@ import { config } from "../../config";
 import { S3 } from "aws-sdk";
 import { S3Service } from './s3.service';
 import { multerOptionsCreateVouchers, multerOptionsUploadVouchers } from 'src/third-parties/interceptors/create-voucher.interceptor';
-
+import * as nodemailer from 'nodemailer'
+import { Cron, CronExpression } from '@nestjs/schedule';
 type FileNameCallback = (error: Error | null, filename: string) => void
 
 @ApiTags('vouchers')
@@ -115,4 +116,13 @@ export class VouchersController {
       response.status(400).json(uplaodRes);
     }
   }
+
+
+  @Cron(CronExpression.EVERY_DAY_AT_8AM)
+  @Post('send-mail')
+  async sendMailExpiredVouchers() {
+    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
+    const currentDate = new Date();
+  }
+
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Req, Param, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -8,6 +8,8 @@ import { SUCCESS_RESPONSE } from '../../common/custom-exceptions';
 import { PermissionGuard } from 'src/third-parties/guard/permission.guard';
 import { Permissions } from 'src/third-parties/decorators/permission.decorator';
 import { PERMISSION } from 'src/common/enum/permission.enum';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UserUsedVouchersDTO } from './dto/userUsedVoucher.dto';
 
 @ApiTags('users')
 @Controller('api/users')
@@ -56,6 +58,14 @@ export class UsersController {
     } catch (error) {
       throw error
     }
+  }
+
+
+  @UseGuards(JwtAuthGuard)
+  @Post('used')
+  async userUsedVouchers(@Body() userUsedVouchersDTO: UserUsedVouchersDTO, @Req() request) {
+    await this.usersService.userUseVouchers(request.user.id, userUsedVouchersDTO.Voucher_id)
+    return new CustomResponse(SUCCESS_RESPONSE.AdminCreateSuccess)
   }
 
 }

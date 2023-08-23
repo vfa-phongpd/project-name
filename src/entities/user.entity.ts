@@ -7,13 +7,14 @@ import { Role } from './role.entity';
 
 
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne, Unique, OneToMany, ManyToOne, DeleteDateColumn } from 'typeorm';
+import { UsersUsedVoucher } from './users_used_voucher.entity';
 
 
 
 @Entity('users')
 export class User {
     @PrimaryGeneratedColumn()
-    id: number;
+    user_id: number;
 
     @IsNotEmpty({ message: 'Name can not be null or empty' })
     @Column({ type: 'varchar', length: 50, nullable: false, name: 'name' })
@@ -67,6 +68,9 @@ export class User {
     @Column({ type: 'datetime', nullable: true })
     updated_at: Date;
 
+
+    @OneToMany(() => UsersUsedVoucher, UsersUsedVoucher => UsersUsedVoucher.user)
+    users_used_vouchers: UsersUsedVoucher[]
 }
 
 

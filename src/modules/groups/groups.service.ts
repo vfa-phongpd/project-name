@@ -77,12 +77,12 @@ export class GroupsService {
     try {
       const membersToCreate = await this.userRepository.find({
         where: {
-          id: In(members),
+          user_id: In(members),
         },
         relations: {
           group_id: true,
         },
-        select: ['id', 'name', 'email'],
+        select: ['user_id', 'name', 'email'],
       });
 
       return membersToCreate

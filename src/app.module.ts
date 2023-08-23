@@ -24,12 +24,17 @@ import { Group } from './entities/group.entity';
 import { VouchersModule } from './modules/vouchers/vouchers.module';
 import { GroupsVouchersModule } from './modules/groups_vouchers/groups_vouchers.module';
 import { S3Service } from './modules/vouchers/s3.service';
+import { UsersUsedVouchersModule } from './modules/users_used_vouchers/users_used_vouchers.module';
+import { UsersUsedVouchersService } from './modules/users_used_vouchers/users_used_vouchers.service';
+import { Voucher } from './entities/voucher.entity';
+import { UsersUsedVoucher } from './entities/users_used_voucher.entity';
+import { GroupsVouchers } from './entities/groups_vouchers.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot(dataSourceOptions),
-    TypeOrmModule.forFeature([User, Role, Permission, Group]),
+    TypeOrmModule.forFeature([User, Role, Permission, Group, Voucher, UsersUsedVoucher, GroupsVouchers]),
     JwtModule,
     PassportModule.register({
       defaultStrategy: 'jwt'
@@ -38,8 +43,8 @@ import { S3Service } from './modules/vouchers/s3.service';
       secret: process.env.accessToken,
       signOptions: { expiresIn: '1d' },
     }),
-    UsersModule, RolesModule, GroupsModule, PermissionsModule, RolePermissionsModule, AuthModule, VouchersModule, GroupsVouchersModule],
+    UsersModule, RolesModule, GroupsModule, PermissionsModule, RolePermissionsModule, AuthModule, VouchersModule, GroupsVouchersModule, UsersUsedVouchersModule],
   controllers: [AppController],
-  providers: [AppService, UsersService, GroupsService, RolesService, PermissionsService, S3Service],
+  providers: [AppService, UsersService, GroupsService, RolesService, PermissionsService, S3Service, UsersUsedVouchersService],
 })
 export class AppModule { }
