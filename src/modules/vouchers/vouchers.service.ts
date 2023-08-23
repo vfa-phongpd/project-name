@@ -10,6 +10,15 @@ import { CreateVoucherDto } from './dto/create-voucher.dto';
 import * as nodemailer from 'nodemailer';
 import { CustomResponse } from 'src/common/response_success';
 import { UsersUsedVoucher } from 'src/entities/users_used_voucher.entity';
+
+class EmailNeedToSend {
+  v_expired_date: Date
+  gv_voucher_id: number
+  u_user_id: number
+  u_name: string
+  u_email: string
+}
+
 @Injectable()
 export class VouchersService {
 
@@ -126,7 +135,9 @@ export class VouchersService {
     return userNeededToSendEmail
   }
 
-  async send_mail(emailNeededSenmail: any) {
+
+
+  async sendMailToUser(emailNeededSendmail: EmailNeedToSend[]) {
     const transporter = nodemailer.createTransport({
       service: 'Gmail',
       auth: {
@@ -136,7 +147,7 @@ export class VouchersService {
     });
 
 
-    const emailPromises = emailNeededSenmail.map(async (voucher) => {
+    const emailPromises = emailNeededSendmail.map(async (voucher) => {
       const mailOptions = {
         from: process.env.AUTH_EmailSend,
         to: voucher.u_email,
